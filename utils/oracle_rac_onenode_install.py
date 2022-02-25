@@ -37,7 +37,7 @@ class OracleRacOneNodeInstall():
 
     def log(self,log_content):
         log_level = 'info'
-        log_type = 'Oracle RAC安装'
+        log_type = 'Oracle RAC The installation'
         current_time = now_local()
         print('{}: {}'.format(current_time,log_content))
         sql = "insert into setup_log(log_type,log_time,log_level,log_content)" \
@@ -46,8 +46,8 @@ class OracleRacOneNodeInstall():
         mysql_exec(sql, values)
 
     def clear_rac(self):
-        self.log('开始清理Oracle RAC')
-        # 删除目录
+        self.log('Began to clean up Oracle RAC')
+        # Delete the directory
         cmd_list = [
             'rm -rf /u01',
             'rm -f /usr/local/bin/dbhome',
@@ -92,13 +92,13 @@ class OracleRacOneNodeInstall():
             'password': self.node_info['node_password']
         }
         linux_conn, _ = LinuxBase(linux_params).connection()
-        self.log('{}：开始清理Oracle RAC！'.format(self.node_info['node_ip']))
+        self.log('{}：Began to clean up Oracle RAC！'.format(self.node_info['node_ip']))
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('Oracle RAC清理完成！')
+        self.log('Oracle RAC cleanup completed！')
 
 
     def upload_software(self, linux_params):
-        # 文件上传
+        # File upload
         LinuxBase(linux_params).sftp_upload_file('{}grid_profile'.format(self.local_path), '/tmp/grid_profile')
         LinuxBase(linux_params).sftp_upload_file('{}oracle_profile'.format(self.local_path), '/tmp/oracle_profile')
         LinuxBase(linux_params).sftp_upload_file('{}compat-libstdc++-33-3.2.3-72.el7.x86_64.rpm'.format(self.local_path),
@@ -112,16 +112,16 @@ class OracleRacOneNodeInstall():
 
     def get_shm_config(self):
         memtotal = get_memtotal(self.node_info['node_ip'],self.node_info['node_password'])
-        # 物理内存-1G 单位为字节
+        # Physical memory 1g unit for bytes
         shmmax = (float(memtotal)/1024/1024-1)*1024*1024*1024
-        # 物理内存-1G 单位为page 
+        # Physical memory 1g unit for the page
         shmall = (float(memtotal)/1024/1024-1)*1024*1024/4
         return (int(shmmax),int(shmall))
 
     def linux_config(self):
         cmd_list = []
 
-        # 修改/etc/hosts信息
+        # Modify /etc/hosts
         ip_conf = "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n" \
                   "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n" \
                   "{}  {}\n".format(self.node_info['node_ip'], self.node_info['hostname'])
@@ -129,15 +129,15 @@ class OracleRacOneNodeInstall():
             'cat /dev/null > /etc/hosts',
             'echo "{}" > /etc/hosts'.format(ip_conf)
         ])
-        # 禁用防火墙
+        # To disable the firewall
         cmd_list.extend([
             'systemctl stop firewalld',
             'systemctl disable firewalld',
             "sed -i 's/SELINUX=enabled/SELINUX=disabled/g' /etc/selinux/config "
         ])
-        # 禁用ntp服务
+        # Disable the NTP service
 
-        # 创建组、用户
+        # Create a group, and the user
         group_list = ['groupdel {}'.format(group[1]) for group in self.linux_group_list] + \
                      ['groupadd -g {} {}'.format(group[0], group[1]) for group in self.linux_group_list]
         cmd_list.extend(group_list)
@@ -151,7 +151,7 @@ class OracleRacOneNodeInstall():
             "echo 'oracle:oracle'|chpasswd"
         ])
 
-        # 创建目录,授权
+        # Create a directory, authorization
         cmd_list.extend([
             'rm -rf /u01',
             'mkdir -p /u01/app/19.0.0/grid',
@@ -163,14 +163,14 @@ class OracleRacOneNodeInstall():
             'chmod -R 775 /u01/'
         ])
 
-        # yum安装必需包
+        # yum Install required packages
         cmd_list.extend([
             'yum -y install {}'.format(self.linux_packages),
             'rpm -ivh /tmp/compat-libstdc++-33-3.2.3-72.el7.x86_64.rpm',
             'rpm -ivh /tmp/cvuqdisk-1.0.10-1.rpm'
         ])
 
-        # 内核参数设置
+        # The kernel parameter Settings
         shmmax,shmall = self.get_shm_config()
         cmd_list.extend([
             'mv /tmp/97-oracle-database-sysctl.conf /etc/sysctl.d/97-oracle-database-sysctl.conf',
@@ -180,17 +180,17 @@ class OracleRacOneNodeInstall():
             '/sbin/sysctl -a'
         ])
         
-        # 资源限制设置
+        # Resource limits set
         cmd_list.extend([
             'mv /tmp/oracle-database-preinstall-19c.conf /etc/security/limits.d/oracle-database-preinstall-19c.conf'
         ])
 
-        # 执行runfixup脚本
+        # Perform runfixup script
         # cmd_list.extend([
         #     'sh /tmp/runfixup.sh'
         # ])
 
-        # 关闭avahi-daemon服务
+        # Close the avahi - daemon service
         cmd_list.extend([
             'systemctl stop avahi-daemon.socket',
             'systemctl stop avahi-daemon.service',
@@ -202,8 +202,8 @@ class OracleRacOneNodeInstall():
         return cmd_list
 
     def do_linux_config(self):
-        self.log('开始进行linux基础配置..')
-        self.log('{} {}：开始进行linux操作系统配置！'.format(self.node_info['node_ip'], self.node_info['hostname']))
+        self.log('Configure Linux foundation started..')
+        self.log('{} {}：To begin the Linux operating system configuration！'.format(self.node_info['node_ip'], self.node_info['hostname']))
         cmd_list = self.linux_config()
 
         linux_params = {
@@ -216,12 +216,12 @@ class OracleRacOneNodeInstall():
 
         self.upload_software(linux_params)
 
-        # 修改主机名
+        # To modify the hostname
         cmd_list.extend([
             'hostnamectl set-hostname {}'.format(self.node_info['hostname'])
         ])
 
-        # 修改profile文件(需单独处理)
+        # Modify the profile file (individually)
         cmd_list.extend([
             'mv /tmp/grid_profile /home/grid/.bash_profile',
             'chown grid:oinstall /home/grid/.bash_profile',
@@ -233,9 +233,9 @@ class OracleRacOneNodeInstall():
         ])
 
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('{} {}：linux操作系统配置完成'.format(self.node_info['node_ip'], self.node_info['hostname']))
+        self.log('{} {}：linux The operating system configuration is complete'.format(self.node_info['node_ip'], self.node_info['hostname']))
 
-        self.log('linux基础配置完成！')
+        self.log('linux Basic configuration is complete！')
 
     def grid_execute_scripts(self):
         linux_params = {
@@ -254,8 +254,8 @@ class OracleRacOneNodeInstall():
 
 
     def grid_install(self):
-        self.log('开始进行grid集群软件安装..')
-        # 只在第一节点操作
+        self.log('To begin the grid clustering software installation..')
+        # Only in the first node operation
         linux_params = {
             'hostname': self.node_info['node_ip'],
             'port': 22,
@@ -263,48 +263,48 @@ class OracleRacOneNodeInstall():
             'password': 'oracle'
         }
         linux_conn, _ = LinuxBase(linux_params).connection()
-        # 上传grid安装包
-        self.log('{} {}：开始上传grid安装包..'.format(self.node_info['node_ip'], self.node_info['hostname']))
+        # Upload the grid installation package
+        self.log('{} {}：Start Posting the grid installation package..'.format(self.node_info['node_ip'], self.node_info['hostname']))
         LinuxBase(linux_params).sftp_upload_file('{}LINUX.X64_193000_grid_home.zip'.format(self.local_path), '/tmp/LINUX.X64_193000_grid_home.zip')
-        self.log('grid安装包上传完成！')
+        self.log('grid The installation package to upload to complete！')
 
-        self.log('{} {}：开始解压缩grid安装包！'.format(self.node_info['node_ip'], self.node_info['hostname']))
+        self.log('{} {}：Began to unpack the grid installation package！'.format(self.node_info['node_ip'], self.node_info['hostname']))
         cmd = 'unzip -q -o /tmp/LINUX.X64_193000_grid_home.zip -d /u01/app/19.0.0/grid/'
         LinuxBase(linux_params).exec_command_res(cmd,linux_conn)
-        self.log('grid安装包解压缩完成！')
+        self.log('grid The installation package decompression！')
         cmd = 'rm -f /tmp/LINUX.X64_193000_grid_home.zip'
         LinuxBase(linux_params).exec_command_res(cmd,linux_conn)
-        self.log('grid安装包清理完成！')
+        self.log('grid The installation package clean finish！')
 
-        self.log('开始生成grid安装响应文件..')
+        self.log('The response file to start generating grid installation..')
         LinuxBase(linux_params).sftp_upload_file('{}gridsetup_onenode.rsp'.format(self.local_path), '/tmp/gridsetup.rsp')
 
-        # 修改响应文件
+        # Modify the response file
         cmd_list = [
             "sed -i 's#NODE_OCR_DISK#{}#g' /tmp/gridsetup.rsp".format(self.node_info['ocr_disk']),
             "sed -i 's#NODE_OCR_PATH#{}#g' /tmp/gridsetup.rsp".format(self.node_info['disk_path'])
         ]
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('grid安装响应文件生成完成！')
+        self.log('The grid installation response cannot be completed！')
 
-        # 静默安装
-        self.log('grid集群配置成功，请在节点{}上执行静默安装：/u01/app/19.0.0/grid/gridSetup.sh -silent -ignorePrereqFailure -responseFile /tmp/gridsetup.rsp'
-                 ' 并根据提示执行root.sh脚本'.format(self.node_info['node_ip']))
+        # Silent installation
+        self.log('grid The cluster configuration is successful, please perform on the node {} silent installation：/u01/app/19.0.0/grid/gridSetup.sh -silent -ignorePrereqFailure -responseFile /tmp/gridsetup.rsp'
+                 ' And according to the prompt implementation root. Sh scripts'.format(self.node_info['node_ip']))
 
-        # 执行静默安装
-        # self.log('开始执行集群软件静默安装..请关注grid安装日志 {}：/tmp/gridsetup.log'.format(node['ip']))
-        # cmd = '/u01/app/19.0.0/grid/gridSetup.sh -silent -ignorePrereqFailure -responseFile /tmp/gridsetup.rsp > /tmp/gridsetup.log'
-        # LinuxBase(linux_params).exec_command_res(cmd)
-        # self.log('grid集群件静默安装完成！')
-        # self.log('请根据/tmp/gridsetup.log中的提示执行脚本！')
-        # 执行静默安装脚本
-        # self.grid_execute_scripts()
+        # Perform silent installation
+        # the self. The log (' silent installation start executing cluster software..Please pay attention to the grid installation log {} : / TMP/gridsetup. Log '. The format (node [' IP ']))
+        # CMD = '/ u01 / app / 19.0.0 / grid/gridSetup. Sh - silent - ignorePrereqFailure - responseFile/TMP/gridSetup RSP > / TMP/gridSetup log'
+        # LinuxBase (linux_params). Exec_command_res (CMD)
+        # the self. The log (' grid cluster a silent installation is complete!')
+        # the self. The log (' according to the/TMP/gridsetup. Please log in the tip executing scripts!')
+        # silent installation script execution
+        # self. Grid_execute_scripts ()
 
-        # 执行配置工具脚本
+        # Perform configuration tool script
         cmd = '/u01/app/19.0.0/grid/gridSetup.sh -executeConfigTools -responseFile /tmp/gridsetup.rsp -silent'
         # LinuxBase(linux_params).exec_command_res(cmd)
 
-        # 安装后进行检查
+        # After installation
         # $ORACLE_HOME/runcluvfy.sh  stage -post  crsinst -n "cispdb1,cispdb2"  -verbose
 
     def oracle_execute_scripts(self):
@@ -319,7 +319,7 @@ class OracleRacOneNodeInstall():
         LinuxBase(linux_params).exec_command_res(cmd)
 
     def oracle_install(self):
-        self.log('开始进行oracle软件安装..')
+        self.log('Begin the oracle software installation..')
         linux_params = {
             'hostname': self.node_info['node_ip'],
             'port': 22,
@@ -327,57 +327,57 @@ class OracleRacOneNodeInstall():
             'password': 'oracle'
         }
         linux_conn, _ = LinuxBase(linux_params).connection()
-        self.log('{} {}：开始上传oracle安装包..'.format(self.node_info['node_ip'], self.node_info['hostname']))
+        self.log('{} {}：Began to upload the oracle installation package..'.format(self.node_info['node_ip'], self.node_info['hostname']))
         LinuxBase(linux_params).sftp_upload_file('{}LINUX.X64_193000_db_home.zip'.format(self.local_path),'/tmp/LINUX.X64_193000_db_home.zip')
-        self.log('oracle安装包上传完成！')
-        self.log('开始解压缩oracle安装包..')
+        self.log('oracle The installation package to upload to complete！')
+        self.log('Started to unzip the oracle installation package..')
         cmd = 'unzip -q -o /tmp/LINUX.X64_193000_db_home.zip -d /u01/app/oracle/product/19.0.0/dbhome_1/'
         LinuxBase(linux_params).exec_command_res(cmd)
-        self.log('oracle安装包解压缩完成！')
+        self.log('oracle The installation package decompression！')
         cmd = 'rm -f /tmp/LINUX.X64_193000_db_home.zip'
         LinuxBase(linux_params).exec_command_res(cmd)
-        self.log('oracle安装包清理完成！')
+        self.log('oracle The installation package clean finish！')
 
-        self.log('开始生成oracle安装响应文件..')
+        self.log('Begin to generate oracle install response file..')
         LinuxBase(linux_params).sftp_upload_file('{}db_install_onenode.rsp'.format(self.local_path), '/tmp/db_install.rsp')
 
-        # 修改响应文件
+        # Modify the response file
         cmd_list = [
             "sed -i 's/NODE_HOSTNAME/{}/g' /tmp/db_install.rsp".format(self.node_info['hostname']),
         ]
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('oracle安装响应文件生成完成！')
+        self.log('The oracle install response cannot be completed！')
 
-        self.log('oracle软件安装前配置成功，请在节点{}上使用oracle用户执行静默安装脚本：'
+        self.log('Before installing the oracle software configuration is successful, please use oracle users perform on the node {} silent installation script：'
                  '/u01/app/oracle/product/19.0.0/dbhome_1/runInstaller -silent -ignorePrereqFailure -responsefile /tmp/db_install.rsp '
-                 ' 并根据提示执行后续脚本'.format(self.node_info['node_ip']))
+                 ' And according to the prompt follow-up script execution'.format(self.node_info['node_ip']))
 
-        # 执行静默安装
-        # self.log('开始Oracle软件静默安装,请关注{}：/tmp/oraclesetup.log'.format(node[ip]))
-        # cmd = '/u01/app/oracle/product/19.0.0/dbhome_1/runInstaller -silent -ignorePrereqFailure -responsefile /tmp/db_install.rsp >/tmp/oraclesetup.log'
-        # LinuxBase(linux_params).exec_command_res(cmd)
-        # self.log('Oracle软件静默安装完成！')
-        # self.log('请根据/tmp/oraclesetup.log中的提示执行脚本！')
+        # silent installation
+        # the self. The log (' start Oracle software silent installation, pay attention to {} : / TMP/oraclesetup log '. The format (node (IP)))
+        # CMD = '/ u01 / app/oracle/product / 19.0.0 / dbhome_1 / runInstaller - silent - ignorePrereqFailure - responsefile/TMP/db_install RSP > / TMP/oraclesetup log'
+        # LinuxBase (linux_params). Exec_command_res (CMD)
+        # self. The log (' silent Oracle software installation is complete!')
+        # the self. The log (' according to the/TMP/oraclesetup. Please log in the tip executing scripts!')
 
-        # 执行root脚本
+        # Perform root script
         # self.oracle_execute_scripts()
 
     def oracle_dbca(self):
-        self.log('开始进行dbca建库..')
+        self.log('To begin building library dbca..')
         grid_params = {
             'hostname': self.node_info['node_ip'],
             'port': 22,
             'username': 'grid',
             'password': 'oracle'
         }
-        self.log('开始创建ASM磁盘组：DATA..')
-        # 创建ASM磁盘组
+        self.log('Began to create the ASM disk group：DATA..')
+        # Create the ASM disk group
         cmd = "/u01/app/19.0.0/grid/bin/asmca -silent -createDiskGroup -diskGroupName DATA -disk '{}' " \
               "-redundancy EXTERNAL -au_size 4 -compatible.asm '19.0.0.0.0' " \
               "-compatible.rdbms '19.0.0.0.0' -compatible.advm '19.0.0.0.0'".format(self.node_info['data_disk'])
 
         LinuxBase(grid_params).exec_command_res(cmd)
-        self.log('ASM磁盘组创建完成！')
+        self.log('ASM Disk group has been created！')
 
         oracle_params = {
             'hostname': self.node_info['node_ip'],
@@ -387,48 +387,48 @@ class OracleRacOneNodeInstall():
         }
         linux_conn, _ = LinuxBase(oracle_params).connection()
 
-        self.log('开始生成dbca建库响应文件..')
+        self.log('To start generating dbca building response file..')
         LinuxBase(oracle_params).sftp_upload_file('{}dbca_onenode.rsp'.format(self.local_path), '/tmp/dbca.rsp')
 
-        # 修改响应文件
+        # Modify the response file
         cmd_list = [
             "sed -i 's/NODE_HOSTNAME/{}/g' /tmp/dbca.rsp".format(self.node_info['hostname']),
             "sed -i 's/NODE_DBNAME/{}/g' /tmp/dbca.rsp".format(self.node_info['dbname']),
             "sed -i 's/NODE_PDBNAME/{}/g' /tmp/dbca.rsp".format(self.node_info['pdbname'])
         ]
         res = [LinuxBase(oracle_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('dbca建库响应文件生成完成！')
+        self.log('dbca Building response cannot be completed！')
 
-        self.log('dbca配置成功，请在节点{}上使用oracle用户执行dbca建库脚本：/u01/app/oracle/product/19.0.0/dbhome_1/bin/dbca -silent -createDatabase -ignorePrereqFailure '
+        self.log('Dbca configuration is successful, please in the node{}Use of oracle users perform dbca build script：/u01/app/oracle/product/19.0.0/dbhome_1/bin/dbca -silent -createDatabase -ignorePrereqFailure '
                  '-responseFile /tmp/dbca.rsp'
-                 ' 并根据提示执行后续脚本'.format(self.node_info['node_ip']))
+                 ' And according to the prompt follow-up script execution'.format(self.node_info['node_ip']))
 
-        # 开始静默安装
-        # self.log('开始进行dbca静默安装，请关注{}：/tmp/dbca.log'.format(node['ip']))
-        # cmd = '/u01/app/oracle/product/19.0.0/dbhome_1/bin/dbca -silent -createDatabase -ignorePrereqFailure ' \
-        #       '-responseFile /tmp/dbca.rsp > /tmp/dbca.log'
-        # LinuxBase(oracle_params).exec_command_res(cmd)
-        # self.log('dbca静默安装完成..')
+        # start silent installation
+        # the self. The log (' begin dbca silent installation, pay attention to {} : / TMP/dbca. Log '. The format (node [' IP ']))
+        # CMD = '/ u01 / app/oracle/product / 19.0.0 / dbhome_1 / bin/dbca - silent - createDatabase - ignorePrereqFailure' \
+        # '- responseFile/TMP/dbca. RSP > / TMP/dbca. Log'
+        # LinuxBase (oracle_params). Exec_command_res (CMD)
+        # the self. The log (' dbca silent installation is complete..')
 
     def do_rac_install(self,module):
         if module == 'linux':
-            self.log('linux基础配置已启动..')
+            self.log('Linux based configuration is started..')
             self.clear_log()
             self.do_linux_config()
         elif module == 'rac':
-            self.log('grid安装已启动..')
+            self.log('The grid installation is started..')
             self.grid_install()
         elif module == 'oracle':
-            self.log('oracle安装已启动..')
+            self.log('Oracle installation is started..')
             self.oracle_install()
         elif module =='dbca':
-            self.log('dbca建库已启动..')
+            self.log('dbca Building has started..')
             self.oracle_dbca()
         elif module == 'clear':
-            self.log('开始清理Oracle rac..')
+            self.log('Began to clean up Oracle rac..')
             self.clear_rac()
         else:
-            print('输入参数不合法！')
+            print('The input parameter is illegal！')
 
 if __name__ == '__main__':
     node_info = {

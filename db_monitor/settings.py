@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#z!nrh$bn536iwb+#_9cp#lv3s(fdslwud(1()9he3qsnw@rzx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -97,11 +97,11 @@ AUTHENTICATION_BACKENDS = ('system.views.CustomBackend',)  ## 重新登录验证
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '3306',
         'NAME': 'db_monitor',
         'USER': 'root',
-        'PASSWORD': 'mysqld',
+        'PASSWORD': '%$321Trewqdsacxz',
     }
 }
 
@@ -131,7 +131,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_AGE = 432000
 LOGIN_URL = '/auth/login'
-LANGUAGE_CODE = 'zh-Hans'
+LANGUAGE_CODE = 'en-Us'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -192,9 +192,9 @@ PAGINATION_SETTINGS = {
 DISPLAY_PER_PAGE = 15
 
 ## celery 4
-CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
 # CELERY_RESULT_BACKEND = 'django-db'
-CELERY_BROKER_URL = 'redis://redis:6379/2'
+CELERY_BROKER_URL = 'redis://localhost:6379/2'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERYD_CONCURRENCY = 4
 CELERY_TIMEZONE = 'Asia/Shanghai'
@@ -278,7 +278,7 @@ SWAGGER_SETTINGS = {
 CHECK_LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
 # send email
-IS_SEND_EMAIL = 0
+IS_SEND_EMAIL = 1
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
@@ -287,5 +287,5 @@ EMAIL_HOST_PASSWORD = '*********'
 EMAIL_TO_USER = ['1782365880@qq.com','gumengkai@hotmail.com']
 
 # send dingding
-IS_SEND_DING_MSG = 0
+IS_SEND_DING_MSG = 1
 DING_WEBHOOK = '*********'
