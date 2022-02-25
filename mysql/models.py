@@ -2,24 +2,24 @@ from django.db import models
 from django.utils import timezone
 
 class MysqlStat(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    port = models.IntegerField("数据库端口号",default=1521)
-    version = models.CharField("数据库版本",max_length=64,blank=True,null=True)
-    updays = models.IntegerField("运行天数",blank=True,null=True)
-    basedir = models.CharField("MySQL路径",max_length=255,blank=True,null=True)
-    datadir = models.CharField("数据存放路径",max_length=255,blank=True,null=True)
-    slow_query_log = models.CharField("慢查询日志是否开启",max_length=32,blank=True,null=True)
-    slow_query_log_file = models.CharField("慢查询日志路径",max_length=255,blank=True,null=True)
-    log_bin = models.CharField("binlog是否开启",max_length=255,blank=True,null=True)
-    max_connections = models.IntegerField("最大连接数",blank=True,null=True)
-    max_connect_errors = models.IntegerField("最大错误连接数",blank=True,null=True)
-    total_rows = models.FloatField("数据库总大小(GB)",blank=True, null=True)
-    data_size = models.FloatField("数据大小(GB)",blank=True, null=True)
-    index_size = models.FloatField("索引大小(GB)",blank=True, null=True)
-    threads_connected = models.IntegerField("连接线程数",blank=True,null=True)
-    threads_running = models.IntegerField("运行线程数",blank=True,null=True)
-    threads_waited = models.IntegerField("等待线程数",blank=True,null=True)
+    tags = models.CharField("The label",max_length=32)
+    host = models.CharField("The host ip",max_length=32)
+    port = models.IntegerField("Database port number",default=1521)
+    version = models.CharField("The database version",max_length=64,blank=True,null=True)
+    updays = models.IntegerField("Run the number of days",blank=True,null=True)
+    basedir = models.CharField("MySQL path",max_length=255,blank=True,null=True)
+    datadir = models.CharField("The data repository paths",max_length=255,blank=True,null=True)
+    slow_query_log = models.CharField("The slow query log is open",max_length=32,blank=True,null=True)
+    slow_query_log_file = models.CharField("The slow query log path",max_length=255,blank=True,null=True)
+    log_bin = models.CharField("binlog Whether open",max_length=255,blank=True,null=True)
+    max_connections = models.IntegerField("Maximum number of connections",blank=True,null=True)
+    max_connect_errors = models.IntegerField("The biggest mistake the number of connections",blank=True,null=True)
+    total_rows = models.FloatField("Total database size(GB)",blank=True, null=True)
+    data_size = models.FloatField("Data size(GB)",blank=True, null=True)
+    index_size = models.FloatField("Index size(GB)",blank=True, null=True)
+    threads_connected = models.IntegerField("Connection number of threads",blank=True,null=True)
+    threads_running = models.IntegerField("The number of threads running",blank=True,null=True)
+    threads_waited = models.IntegerField("Waiting for the number of threads",blank=True,null=True)
     threads_created = models.IntegerField("创建线程数",blank=True,null=True)
     threads_cached = models.IntegerField("缓存线程数",blank=True,null=True)
     qps = models.IntegerField("每秒查询请求数",blank=True, null=True)
@@ -77,30 +77,30 @@ class MysqlStat(models.Model):
 
     class Meta:
         db_table = 'mysql_stat'
-        verbose_name = "mysql数据库采集数据"
+        verbose_name = "mysql Database collect data"
         verbose_name_plural = verbose_name
 
 
 class MysqlSlowquery(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=256)
-    start_time  = models.CharField("执行时间",max_length=64)
-    client_host = models.CharField("主机信息",max_length=64)
-    db_name = models.CharField("数据库名",max_length=64)
-    sql_text = models.TextField("sql文本")
-    query_time = models.FloatField("执行耗时(秒)")
-    lock_time = models.FloatField("锁等待时间(秒)")
-    rows_examined = models.IntegerField("扫描行数",blank=True, null=True)
-    rows_sent = models.IntegerField("返回客户端行数",blank=True, null=True)
-    thread_id = models.CharField("线程号",max_length=64)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True, null=True)
+    tags = models.CharField("The label",max_length=32)
+    host = models.CharField("The host ip",max_length=256)
+    start_time  = models.CharField("The execution time",max_length=64)
+    client_host = models.CharField("Host information",max_length=64)
+    db_name = models.CharField("The database name",max_length=64)
+    sql_text = models.TextField("sql text")
+    query_time = models.FloatField("Execution time (in seconds)")
+    lock_time = models.FloatField("Lock wait time (in seconds)")
+    rows_examined = models.IntegerField("Scan lines",blank=True, null=True)
+    rows_sent = models.IntegerField("Returns the client rows",blank=True, null=True)
+    thread_id = models.CharField("The thread number",max_length=64)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True, null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'mysql_slowquery'
-        verbose_name = "mysql慢查询采集数据"
+        verbose_name = "mysql The slow query data"
         verbose_name_plural = verbose_name
 
 
@@ -156,29 +156,29 @@ class MysqlStatHis(models.Model):
     innodb_buffer_pool_pages_free = models.IntegerField("innodb缓冲池中剩余页数量",blank=True,null=True)
     innodb_buffer_pool_hit = models.FloatField("innodb缓冲池缓存命中率",blank=True,null=True)
     innodb_io_capacity = models.IntegerField("从缓冲区刷新脏页时一次刷新的数量",blank=True,null=True)
-    innodb_read_io_threads = models.IntegerField("innodb读线程数量",blank=True,null=True)
-    innodb_write_io_threads = models.IntegerField("innodb写线程数量",blank=True,null=True)
-    innodb_rows_deleted = models.IntegerField("innodb每秒删除的行数",blank=True,null=True)
-    innodb_rows_inserted = models.IntegerField("innodb每秒插入的行数",blank=True,null=True)
-    innodb_rows_read = models.IntegerField("innodb每秒读取的行数",blank=True,null=True)
-    innodb_rows_updated = models.IntegerField("innodb每秒更新的行数",blank=True,null=True)
-    innodb_row_lock_waits = models.IntegerField("innodb启动到现在总共等待的次数",blank=True,null=True)
-    innodb_row_lock_time_avg = models.FloatField("每次等待所花费平均时间",blank=True,null=True)
-    innodb_buffer_pool_pages_flushed = models.IntegerField("innodb脏页刷新的频率",blank=True,null=True)
-    innodb_data_read = models.FloatField("innodb读取的数据量",blank=True,null=True)
-    innodb_data_written = models.FloatField("innodb写入的数据量",blank=True,null=True)
-    innodb_data_reads = models.IntegerField("innodb读请求次数",blank=True,null=True)
-    innodb_data_writes = models.IntegerField("innodb写请求次数",blank=True,null=True)
-    innodb_log_writes = models.IntegerField("innodb日志写入次数",blank=True,null=True)
-    innodb_data_fsyncs = models.IntegerField("数据刷新次数",blank=True,null=True)
-    innodb_os_log_written = models.FloatField("innodb写入redo log的字节数",blank=True,null=True)
-    status = models.IntegerField("数据库连接状态 0成功 1失败",blank=True, null=True)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True, null=True)
+    innodb_read_io_threads = models.IntegerField("Innodb read number of threads",blank=True,null=True)
+    innodb_write_io_threads = models.IntegerField("Innodb write number of threads",blank=True,null=True)
+    innodb_rows_deleted = models.IntegerField("Innodb to delete the number of rows per second",blank=True,null=True)
+    innodb_rows_inserted = models.IntegerField("Innodb insert the number of rows per second",blank=True,null=True)
+    innodb_rows_read = models.IntegerField("Innodb rows read per second",blank=True,null=True)
+    innodb_rows_updated = models.IntegerField("Innodb update the number of rows per second",blank=True,null=True)
+    innodb_row_lock_waits = models.IntegerField("Innodb starts to now waiting for the number of times altogether",blank=True,null=True)
+    innodb_row_lock_time_avg = models.FloatField("Waiting for the average time spent at a time",blank=True,null=True)
+    innodb_buffer_pool_pages_flushed = models.IntegerField("The frequency of the innodb dirty page refresh",blank=True,null=True)
+    innodb_data_read = models.FloatField("Inodb read the amount of data",blank=True,null=True)
+    innodb_data_written = models.FloatField("Write the amount of data the innodb",blank=True,null=True)
+    innodb_data_reads = models.IntegerField("Innodb read requests",blank=True,null=True)
+    innodb_data_writes = models.IntegerField("Innodb write requests",blank=True,null=True)
+    innodb_log_writes = models.IntegerField("Innodb log write the number",blank=True,null=True)
+    innodb_data_fsyncs = models.IntegerField("Number of data refresh",blank=True,null=True)
+    innodb_os_log_written = models.FloatField("Write the number of bytes of redo log innodb",blank=True,null=True)
+    status = models.IntegerField("Database connection state 0 success 1 failed",blank=True, null=True)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True, null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'mysql_stat_his'
-        verbose_name = "mysql数据库采集数据"
+        verbose_name = "mysql Database collect data"
         verbose_name_plural = verbose_name

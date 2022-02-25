@@ -27,39 +27,39 @@ def check_oracle(tags,oracle_params):
     db_conn_cdb = OracleBase(oracle_params).connection_cdb() if db_version == 'Oracle12c' else db_conn
 
     if db_conn and db_conn_cdb:
-        # db信息监控
-        checklog.logger.info('{}:开始获取Oracle数据库监控信息' .format(tags))
-        # 数据库
+        # Db information monitoring
+        checklog.logger.info('{}:Start for the Oracle database monitoring information' .format(tags))
+        # The database
         dbname, db_unique_name, database_role, open_mode, log_mode, dbid, flashback_on, platform, created = database_info(db_conn)
-        # 容量
+        # capacity
         datafile_size = round(get_datafile_size(db_conn)[0],2)
         tempfile_size = round(get_tempfile_size(db_conn)[0],2)
         archivelog_size = round(get_archivelog_size(db_conn)[0],2)
-        # 实例
+        # The instance
         inst_id, instance_name, hostname, startup_time, version = instance_info(db_conn)
         updays = (datetime.now() - startup_time).days
-        # 连接数
+        # The number of connections
         max_process,current_process,process_used_percent = process_info(db_conn_cdb)
-        # 归档
+        # The archive
         archive_used_percent = get_archived(db_conn)
-        # 审计
+        # The audit
         audit_trail = para(db_conn,'audit_trail')
         is_rac = para(db_conn,'cluster_database')
-        # 默认Undo表空间
+        # The default Undo tablespace
         undo_tablespace = para(db_conn,'undo_tablespace')
         # Oraclestat
         oraclestat = OracleStat(oracle_params,db_conn)
         oraclestat.get_oracle_stat()
         time.sleep(1)
         oracle_data = oraclestat.get_oracle_stat()
-        # 状态数据
+        # State data
         oracle_osstat = oracle_data['os']
         oracle_stat = oracle_data['stat']
         oracle_wait = oracle_data['wait']
         oracle_sess = oracle_data['sess']
         oracle_mem = oracle_data['mem']
         oracle_load = oracle_data['load']
-        # PGA使用率
+        # PGA usage
         is_pga = para(db_conn, 'pga_aggregate_target')
         if int(is_pga) > 0:
             pga_target_size, pga_used_size, pga_used_percent = pga(db_conn)
@@ -74,7 +74,7 @@ def check_oracle(tags,oracle_params):
             adg_trans_value = 0
             adg_apply_value = 0
 
-        # 锁等待信息
+        # Lock waiting for information
         lock_wait_res = get_lockwait_count(db_conn)
         dic_lock_wait = {each[0]: each[1] for each in lock_wait_res}
         enq_tx_row_lock_contention = dic_lock_wait.get('enq: TX - row lock contention', 0)
@@ -85,7 +85,7 @@ def check_oracle(tags,oracle_params):
         lock_wait_others = sum(each[1] for each in lock_wait_res) - (
                     enq_tx_row_lock_contention + enq_tm_contention + row_cache_lock + library_cache_lock + enq_tx_contention)
 
-        checklog.logger.info('{}：写入oracle_stat采集数据' .format(tags))
+        checklog.logger.info('{}：Write oracle_stat Collect data' .format(tags))
         clear_table(tags,'oracle_stat')
 
         insert_data_values = {**locals(),**oracle_osstat,**oracle_wait,**oracle_load,**oracle_sess,**oracle_stat,**oracle_mem}
@@ -115,7 +115,7 @@ def check_oracle(tags,oracle_params):
 
         insert_sql = insert_data_sql.format(**insert_data_values)
         mysql_exec(insert_sql)
-        checklog.logger.info('{}：获取Oracle数据库监控数据(数据库名：{} 数据库角色：{} 数据库状态：{})' .format(tags, dbname, database_role, open_mode))
+        checklog.logger.info('{}：Access to the Oracle database monitoring data (the database name: {} database roles: {} database state：{})' .format(tags, dbname, database_role, open_mode))
         archive_table(tags,'oracle_stat')
 
         # control file
@@ -141,7 +141,7 @@ def check_oracle(tags,oracle_params):
             insert_sql = insert_sql.replace('None','NULL')
             mysql_exec(insert_sql)
 
-        # 表空间
+        # Table space
         clear_table(tags, 'oracle_tablespace')
         tbsinfo_list = tablespace(db_conn)
         for tbsinfo in tbsinfo_list:
@@ -154,7 +154,7 @@ def check_oracle(tags,oracle_params):
             mysql_exec(insert_sql)
         archive_table(tags, 'oracle_tablespace')
 
-        # 临时表空间
+        # Temporary table space
         clear_table(tags, 'oracle_temp_tablespace')
         temptbsinfo_list = temp_tablespace(db_conn)
         for temptbsinfo in temptbsinfo_list:
@@ -167,7 +167,7 @@ def check_oracle(tags,oracle_params):
             mysql_exec(insert_sql)
         archive_table(tags, 'oracle_temp_tablespace')
 
-         # undo表空间
+         # The undo tablespace
         clear_table(tags, 'oracle_undo_tablespace')
         undotbsinfo_list = get_undo_tablespace(db_conn)
         for undotbsinfo in undotbsinfo_list:
@@ -180,7 +180,7 @@ def check_oracle(tags,oracle_params):
             mysql_exec(insert_sql)
         archive_table(tags, 'oracle_undo_tablespace')
 
-        # 统计信息分析
+        # Statistics analysis
         clear_table(tags,'oracle_table_stats')
         oracletablestats_list = get_tab_stats(db_conn)
         for each in oracletablestats_list:
@@ -190,15 +190,15 @@ def check_oracle(tags,oracle_params):
             insert_sql = insert_data_sql.format(**locals())
             mysql_exec(insert_sql)
 
-        # 后台日志解析
+        # Backstage log parsing
         # get_oracle_alert(tags,db_conn,oracle_params,linux_params)
 
         db_conn.close()
     else:
-        error_msg = "{}:数据库连接失败" .format(tags)
+        error_msg = "{}:Database connection fails" .format(tags)
         checklog.logger.error(error_msg)
         clear_table(tags,'oracle_stat')
-        checklog.logger.info('{}:写入oracle_stat采集数据'.format(tags))
+        checklog.logger.info('{}:Write oracle_stat acquisition data'.format(tags))
         sql = "insert into oracle_stat(tags,host,port,service_name,status,check_time) values(%s,%s,%s,%s,%s,%s)"
         value = (tags, oracle_params['host'], oracle_params['port'], oracle_params['service_name'], 1,check_time)
         mysql_exec(sql, value)

@@ -14,7 +14,7 @@ def check_linux(tags,linux_params):
     # create connection
     linux_conn, _ = LinuxBase(linux_params).connection()
     try:
-        checklog.logger.info('{}:开始获取Linux主机监控信息' .format(tags))
+        checklog.logger.info('{}:Began to get Linux host monitoring information' .format(tags))
         # get linuxstat data
         linuxstat = LinuxStat(linux_params, linux_conn).get_linux()
         hostinfo = linuxstat['hostinfo']
@@ -81,9 +81,9 @@ def check_linux(tags,linux_params):
             mysql_exec(insert_sql)
         archive_table(tags,'linux_io_stat')
     except Exception as e:
-        error_msg = "{}:linux主机连接失败,{}" .format(tags,e)
+        error_msg = "{}:linux Host connection failure,{}" .format(tags,e)
         checklog.logger.error(error_msg)
-        checklog.logger.info('{}:写入linux_stat采集数据'.format(tags))
+        checklog.logger.info('{}:Write linux_stat acquisition data'.format(tags))
         clear_table(tags,'linux_stat')
         sql = "insert into linux_stat(tags,host,port,status,check_time) values('{tags}','{host}',{port},1,'{check_time}')"
         sql = sql.format(**locals())

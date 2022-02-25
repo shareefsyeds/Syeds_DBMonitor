@@ -24,7 +24,7 @@ def check_mysql(tags, mysql_params):
     mysql_conn = MysqlBase(mysql_params).connection()
 
     if mysql_conn:
-        checklog.logger.info('{}:开始获取MySQL数据库监控信息' .format(tags))
+        checklog.logger.info('{}:Start MySQL database monitoring information' .format(tags))
         # get mysqlstat data
         mysqlstat = MySQLStat(mysql_params, mysql_conn)
         mysqlstat.init_stat_vals()
@@ -42,7 +42,7 @@ def check_mysql(tags, mysql_params):
         innodb_buffer_pool_reads = mysqldata['innodb_buffer_pool_reads']
         innodb_buffer_pool_hit = (1 - innodb_buffer_pool_reads / innodb_buffer_pool_read_requests) * 100 if innodb_buffer_pool_read_requests != 0 else 100
 
-        checklog.logger.info('{}：写入mysql_stat采集数据' .format(tags))
+        checklog.logger.info('{}：Write mysql_stat acquisition data' .format(tags))
         clear_table(tags,'mysql_stat')
 
         insert_data_sql = "insert into mysql_stat(tags,host,port,version,updays,basedir,datadir,slow_query_log,slow_query_log_file,log_bin," \
@@ -69,15 +69,15 @@ def check_mysql(tags, mysql_params):
         mysql_exec(insert_sql)
         archive_table(tags,'mysql_stat')
 
-        # 后台日志解析
+        # Backstage log parsing
         get_mysql_alert(tags,mysql_params,linux_params)
 
-        # 慢查询日志解析
+        # The slow query log interpretation
         get_mysql_slowquery(tags,mysql_params,linux_params)
     else:
-        error_msg = "{}:mysql数据库连接失败".format(tags)
+        error_msg = "{}:mysql Database connection fails".format(tags)
         checklog.logger.error(error_msg)
-        checklog.logger.info('{}:写入mysql_stat采集数据'.format(tags))
+        checklog.logger.info('{}:Write mysql_stat acquisition data'.format(tags))
         clear_table(tags, 'mysql_stat')
         sql = "insert into mysql_stat(tags,host,port,status,check_time) values('{tags}','{host}',{port},1,'{check_time}')"
         sql = sql.format(**locals())

@@ -89,7 +89,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'db_monitor.wsgi.application'
 AUTH_USER_MODEL = 'system.users'
-AUTHENTICATION_BACKENDS = ('system.views.CustomBackend',)  ## 重新登录验证,增加邮箱名字也可以用作登录
+AUTHENTICATION_BACKENDS = ('system.views.CustomBackend',)  ## Login again to verify, increase the mailbox can also be used as login name
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -181,14 +181,14 @@ LOGGING = {
     },
 }
 
-# 表格table
+# Form the table
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 3,
     'MARGIN_PAGES_DISPLAYED': 2,
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }
 
-# 表格table 一页 展示数据
+# Form a page table to show the data
 DISPLAY_PER_PAGE = 15
 
 ## celery 4
@@ -201,7 +201,7 @@ CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERYD_MAX_TASKS_PER_CHILD = 10
 CELERYD_FORCE_EXECV = True
 
-# 设置默认不存结果
+# Don't have any results to set the default
 # CELERY_IGNORE_RESULT = True
 CELERY_CREATE_MISSING_QUEUES = True
 CELERY_DISABLE_RATE_LIMITS = True
@@ -222,7 +222,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer'  # 注释掉 可以关闭  api web界面
+        'rest_framework.renderers.BrowsableAPIRenderer'  # Comment out can close API web interface
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.AllowAny',
@@ -240,11 +240,11 @@ CORS_ORIGIN_WHITELIST = (
 )
 MIDDLEWARE_CLASSES = ('system.views.DisableCSRFCheck',)
 
-# 配置ASGI
+# Configuration ASGI
 ASGI_APPLICATION = "db_monitor.routing.application"
 
 SWAGGER_SETTINGS = {
-    # 基础样式
+    # Basic style
     # 'SECURITY_DEFINITIONS': {
     #     "basic": {
     #         'type': 'basic'
@@ -258,23 +258,23 @@ SWAGGER_SETTINGS = {
             'name': 'authorization'
         }
     },
-    # 如果需要登录才能够查看接口文档, 登录的链接使用restframework自带的.
+    # If you need to log in to view the interface documentation, login link restframework used to own.
     # 'LOGIN_URL': '/api/v1/login/',
     # 'LOGOUT_URL': 'rest_framework:logout',
     # 'DOC_EXPANSION': None,
     # 'SHOW_REQUEST_HEADERS':True,
     # 'USE_SESSION_AUTH': True,
     # 'DOC_EXPANSION': 'list',
-    # 接口文档中方法列表以首字母升序排列
+    # Interface in the document list of methods to initials ascending
     'APIS_SORTER': 'alpha',
-    # 如果支持json提交, 则接口文档中包含json输入框
+    # If the submitted support json interface document contains json input box
     'JSON_EDITOR': True,
-    # 方法列表字母排序
+    # Methods the list in alphabetical order
     'OPERATIONS_SORTER': 'alpha',
     'VALIDATOR_URL': None,
 }
 
-# 数据采集日志
+# Data acquisition log
 CHECK_LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
 # send email
