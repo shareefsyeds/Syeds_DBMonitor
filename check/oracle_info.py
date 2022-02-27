@@ -2,17 +2,17 @@
 
 from utils.oracle_base import *
 
-# 获取dbinfo,name,database_role,open_mode
+# For dbinfo,name,database_role,open_mode
 def database_info(db_conn):
     sql = "select name,db_unique_name,database_role,open_mode,log_mode,dbid,flashback_on,platform_name,created from v$database"
     return query_one(db_conn,sql)
 
-# 获取实例信息
+# For instance information
 def instance_info(db_conn):
     sql = "select instance_number,instance_name,host_name,startup_time,version from v$instance"
     return query_one(db_conn,sql)
 
-# 获取密码过期信息
+# Get password expiration information
 def pwd_info(db_conn):
     sql = ''' select username, trunc(expiry_date - sysdate) result_number
   from dba_users
@@ -23,18 +23,18 @@ def pwd_info(db_conn):
  '''
     return query_all(db_conn,sql)
 
-# 获取归档使用情况
+# Access to archive usage
 def get_archived(db_conn):
     sql = ''' select percent_space_used from v$flash_recovery_area_usage a where a.file_type='ARCHIVED LOG' '''
     res =  query_one(db_conn,sql)
     return res[0] if res else 0
 
-# 获取等待事件信息
+# Waiting for the event information
 def wait_events(db_conn):
     sql = '''select event#, event, count(*) from v$session group by event#, event order by 3'''
     return query_all(db_conn,sql)
 
-# 获取无效索引
+# Access to invalid index
 def invalid_index(db_conn):
     sql = '''select owner, index_name, '' partition_name, status
   from dba_indexes
@@ -54,7 +54,7 @@ select i.owner, i.index_name, s.subpartition_name, s.status
     return query_all(db_conn,sql)
 
 
-# 获取锁等待信息
+# Acquiring a lock wait for information
 def lock_info(db_conn):
     sql = '''SELECT DECODE(request, 0, 'Holder: ', 'Waiter: ') || SID sess,
        decode(lmode,
@@ -86,14 +86,14 @@ def lock_info(db_conn):
  ORDER BY id1, request'''
     return query_all(db_conn,sql)
 
-# 获取连接数信息
+# For information on the number of connections
 def process_info(db_conn):
     sql = '''select current_utilization,limit_value,trunc(current_utilization * 100 / limit_value) Result_Number
   from v$resource_limit
  where resource_name in ('processes')'''
     return query_one(db_conn,sql)
 
-# 获取PGA使用率
+# Get PGA usage
 def pga(db_conn):
     sql = '''select round(b.value / 1024 / 1024, 1) pga_target,
        round(a.pga_used_mb, 1),
@@ -103,22 +103,22 @@ def pga(db_conn):
  where b.name = 'pga_aggregate_target' '''
     return query_one(db_conn,sql)
 
-# 获取asm存储信息
+# Asm to store information
 def asm(db_conn):
     sql = '''select name,state,total_mb,free_mb,usable_file_mb from v$asm_diskgroup'''
     return query_all(db_conn,sql)
 
-# 获取adg传输延迟
+# For adg transmission delay
 def adg_trans(db_conn):
     sql = "select value,substr(value,2,2)*24*3600+substr(value,5,2)*3600+substr(value,8,2)*60+substr(value,11,2) from v$dataguard_stats where name='transport lag'"
     return query_one(db_conn,sql)
 
-# 获取adg应用延迟
+# Application for adg delay
 def adg_apply(db_conn):
     sql = "select value,substr(value,2,2)*24*3600+substr(value,5,2)*3600+substr(value,8,2)*60+substr(value,11,2) from v$dataguard_stats where name='apply lag'"
     return query_one(db_conn,sql)
 
-# 获取表空间使用率
+# For table space utilization
 def tablespace(db_conn):
     sql = '''SELECT T1.*, T2.USED_MB
   FROM (SELECT DF.TABLESPACE_NAME,
@@ -151,7 +151,7 @@ def tablespace(db_conn):
  WHERE T1.TABLESPACE_NAME = T2.NAME'''
     return query_all(db_conn,sql)
 
-# 获取临时表空间使用率
+# Obtain a temporary table space utilization
 def temp_tablespace(db_conn):
     sql = '''SELECT A.tablespace_name tablespace,
        D.mb_total,
@@ -166,7 +166,7 @@ def temp_tablespace(db_conn):
  GROUP by A.tablespace_name, D.mb_total'''
     return query_all(db_conn,sql)
 
-# 获取undo表空间使用率
+# Access to the undo tablespace usage
 def get_undo_tablespace(db_conn):
     sql = '''select  b.tablespace_name,
        nvl(used_undo, 0) "USED_UNDO(M)",
@@ -191,22 +191,22 @@ def para(db_conn,para):
     res = query_one(db_conn,sql)
     return res[0]
 
-# 获取数据文件大小
+# To get the data file size
 def get_datafile_size(db_conn):
     sql = 'select sum(bytes)/1024/1024/1024 from dba_data_files'
     return query_one(db_conn,sql)
 
-# 获取临时文件大小
+# For the temporary file size
 def get_tempfile_size(db_conn):
     sql = 'select sum(bytes)/1024/1024/1024 from dba_temp_files'
     return query_one(db_conn,sql)
 
-# 获取归档量
+# For archiving volume
 def get_archivelog_size(db_conn):
     sql = "select nvl(sum(blocks*block_size)/1024/1024/1024,0) from v$archived_log where archived='YES' and deleted='NO' "
     return query_one(db_conn,sql)
 
-# 统计信息分析
+# Statistics analysis
 def get_tab_stats(db_conn):
     sql = '''
     select owner,table_name,num_rows,change_pct,last_analyzed
@@ -224,17 +224,17 @@ def get_tab_stats(db_conn):
     '''
     return query_all(db_conn,sql)
 
-# 获取controlfile信息
+# Controlfile information
 def get_controlfile(db_conn):
     sql = "select name,round(block_size*file_size_blks/1024/1024,2) size_M  from v$controlfile"
     return query_all(db_conn,sql)
 
-# 获取asm存储信息
+# Asm to store information
 def get_redolog(db_conn):
     sql =  """select a.GROUP# group_no,b.THREAD# thread_no,a.TYPE,b.SEQUENCE# sequence_no,b.BYTES/1024/1024 SIZE_M,b.ARCHIVED,b.STATUS,a.MEMBER from v$logfile a,v$log b where a.GROUP#=b.GROUP#(+)"""
     return query_all(db_conn,sql)
 
-# 获取锁等待信息
+# Acquiring a lock wait for information
 def get_lockwait_count(db_conn):
     sql =  "select event, count(1) cnt " \
            "from v$session " \
@@ -264,6 +264,3 @@ if __name__ =='__main__':
     library_cache_lock = dic_res.get('library cache lock',0)
     enq_tx_contention = dic_res.get('enq: TX - contention',0)
     lock_wait_others = sum(each[1] for each in res) - (enq_tx_row_lock_contention+row_cache_lock+library_cache_lock+enq_tx_contention)
-
-
-

@@ -94,7 +94,7 @@ def checkall():
     for each in check_pool:
         each.join()
 
-    # 告警
+    # Alarm
     check_alarm()
 
 
