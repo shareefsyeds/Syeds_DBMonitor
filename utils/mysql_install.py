@@ -25,7 +25,7 @@ class MysqlInstall():
 
     def log(self,log_content):
         log_level = 'info'
-        log_type = 'MySQL安装'
+        log_type = 'MySQL installation '
         current_time = now_local()
         print('{}: {}'.format(current_time,log_content))
         sql = "insert into setup_log(log_type,log_time,log_level,log_content)" \
@@ -34,25 +34,25 @@ class MysqlInstall():
         mysql_exec(sql, values)
     
     def linux_config(self,linux_conn,linux_params):
-        self.log('开始进行linux基础配置..')
+        self.log('Configure Linux foundation started..')
         cmd_list = [
             'systemctl stop firewalld',
             'systemctl disable firewalld',
-            "sed -i 's/SELINUX=enabled/SELINUX=disabled/g' /etc/selinux/config ", #关闭防火墙，selinux
-            'move /etc/my.cnf /etc/my.cnfbak', #移除旧的MySQL参数文件
+            "sed -i 's/SELINUX=enabled/SELINUX=disabled/g' /etc/selinux/config ", #Close the firewall, selinux
+            'move /etc/my.cnf /etc/my.cnfbak', #Removing the old MySQL parameter file
             'yum search libaio',
-            'yum install libaio', #安装libaio包
+            'yum install libaio', #Install libaio package
             'userdel -r mysql',
             'groupadd mysql',
             'useradd -g mysql -G mysql mysql',
-            "echo 'mysql:mysqld'|chpasswd", #创建MySQL用户
+            "echo 'mysql:mysqld'|chpasswd", #Create a MySQL user
             ]
 
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('{}：linux操作系统配置完成'.format(self.node_info['ip']))
+        self.log('{}：linux operating system configuration is complete'.format(self.node_info['ip']))
 
     def create_mysql_dir(self,linux_conn,linux_params):
-        self.log('开始创建MySQL目录..')
+        self.log('To create the MySQL directory..')
         mysql_path = self.node_info['mysql_path']
         data_path = self.node_info['data_path']
         mysql_run = '{}/run' .format(mysql_path)
@@ -67,16 +67,16 @@ class MysqlInstall():
         cmd_list.extend(['mkdir -p {}'.format(dir) for dir in dirs])
 
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('{}：创建目录完成'.format(self.node_info['ip']))
+        self.log('{}：Create a directory to complete the'.format(self.node_info['ip']))
 
     
     def generate_mysql_cnf(self,linux_conn,linux_params):
-        self.log('开始生成MySQL配置文件..')
+        self.log('Begin to generate the MySQL configuration file..')
         mysql_path = self.node_info['mysql_path']
         data_path = self.node_info['data_path']
         mysql_port = self.node_info['port']
 
-        # innodb buffer pool大小设置为物理内存*0.7
+        # Innodb buffer pool size is set to physical memory * 0.7
         memory_size = float(self.node_info['memory'])
         innodb_buffer_pool_size = str(int(memory_size*0.7*1024)) + 'M'
 
@@ -90,24 +90,24 @@ class MysqlInstall():
             "sed -i 's/MYSQL_PORT/{}/g' {}/my.cnf".format(mysql_port,mysql_path)
         ]
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('{}：MySQL配置文件生成完成'.format(self.node_info['ip']))
+        self.log('{}：MySQL configuration file generated'.format(self.node_info['ip']))
     
     def mysql_initialize(self,linux_conn,linux_params):
         mysql_path = self.node_info['mysql_path']
         data_path = self.node_info['data_path']
 
         mysql_package = self.mysql_soft_config[self.node_info['version']]
-        # 上传
-        self.log('开始上传MySQL安装包：{}..'.format(mysql_package))
+        # upload
+        self.log('Start Posting MySQL installation package：{}..'.format(mysql_package))
         LinuxBase(linux_params).sftp_upload_file('{}{}'.format(self.local_path,mysql_package), '/tmp/{}'.format(mysql_package))
-        self.log('{}：MySQL安装包上传完成'.format(self.node_info['ip']))
+        self.log('{}：MySQL installation package to upload to complete'.format(self.node_info['ip']))
 
-        # 解压
-        self.log('开始解压MySQL安装包..')
+        # Unpack the
+        self.log('Began to unpack the MySQL installation package..')
         cmd = 'tar xvf /tmp/{} -C {}/'.format(mysql_package,mysql_path)
         LinuxBase(linux_params).exec_command_res(cmd,linux_conn)
-        self.log('{}：MySQL安装包解压完成'.format(self.node_info['ip']))
-        # 授权
+        self.log('{}：MySQL installation package unzipped'.format(self.node_info['ip']))
+        #authorization
         cmd_list = [
             'mv {}/mysql*/* {}'.format(mysql_path,mysql_path),
             'chown -R mysql:mysql {}'.format(mysql_path),
@@ -116,13 +116,13 @@ class MysqlInstall():
             'chmod -R 775 {}'.format(data_path),
         ]
         res = [LinuxBase(linux_params).exec_command_res(cmd, linux_conn) for cmd in cmd_list]
-        self.log('开始初始化MySQL..')
-        # 初始化
+        self.log('Start initialized MySQL..')
+        # Initialize the
         cmd = '{}/bin/mysqld --defaults-file={}/my.cnf --initialize-insecure --user=mysql'.format(mysql_path,mysql_path)
         LinuxBase(linux_params).exec_command_res(cmd,linux_conn)
-        self.log('{}：MySQL初始化完成'.format(self.node_info['ip']))
-        self.log('请使用MySQL用户(默认密码mysqld)启动MySQL数据库：{}/bin/mysqld_safe --defaults-file={}/my.cnf --user=mysql &'.format(mysql_path,mysql_path))
-        # 启动
+        self.log('{}：MySQL initialization completed '.format(self.node_info['ip']))
+        self.log('Please use the MySQL user (the default password mysqld) start the MySQL database：{}/bin/mysqld_safe --defaults-file={}/my.cnf --user=mysql &'.format(mysql_path,mysql_path))
+        # Start the
         # cmd = '{}/bin/mysqld_safe --defaults-file={}/my.cnf --user=mysql &'.format(mysql_path,mysql_path)
         # LinuxBase(linux_params).exec_command_res(cmd,linux_conn)
 
