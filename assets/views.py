@@ -8,14 +8,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import *
 
-# Ecs Api           drf 中文文档   http://drf.jiuyou.info/#/drf/requests
+# Ecs Api           DRF Chinese document  http://drf.jiuyou.info/#/drf/requests
 class ApiOracleList(generics.ListCreateAPIView):
     queryset = OracleList.objects.get_queryset().order_by('id')
     serializer_class = OracleListSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ('tags', 'host','db_version')
     search_fields = ('tags', 'host',)
-    permission_classes = (permissions.DjangoModelPermissions,)  # 继承 django的权限
+    permission_classes = (permissions.DjangoModelPermissions,)  # Django permissions inheritance
 
 class ApiOracleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = OracleList.objects.get_queryset().order_by('id')
@@ -28,7 +28,7 @@ class ApiMysqlList(generics.ListCreateAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ('tags', 'host','db_version')
     search_fields = ('tags', 'host',)
-    permission_classes = (permissions.DjangoModelPermissions,)  # 继承 django的权限
+    permission_classes = (permissions.DjangoModelPermissions,)  # Django permissions inheritance
 
 class ApiMysqlDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MysqlList.objects.get_queryset().order_by('id')
@@ -41,7 +41,7 @@ class ApiLinuxList(generics.ListCreateAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ('tags', 'host','linux_version')
     search_fields = ('tags', 'host',)
-    permission_classes = (permissions.DjangoModelPermissions,)  # 继承 django的权限
+    permission_classes = (permissions.DjangoModelPermissions,)  # Django permissions inheritance
 
 class ApiLinuxDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = LinuxList.objects.get_queryset().order_by('id')
@@ -55,7 +55,7 @@ class ApiRedisList(generics.ListCreateAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_fields = ('tags', 'host','redis_version')
     search_fields = ('tags', 'host',)
-    permission_classes = (permissions.DjangoModelPermissions,)  # 继承 django的权限
+    permission_classes = (permissions.DjangoModelPermissions,)  # Django permissions inheritance
 
 class ApiRedisDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = RedisList.objects.get_queryset().order_by('id')
