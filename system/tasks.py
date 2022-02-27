@@ -13,25 +13,25 @@ def main_check():
 
 @shared_task
 def oracle_rac_setup(rac_info,node_list,module):
-    print('Oracle RAC安装已启动！')
+    print('Oracle RAC installation is started！')
     oracle_rac_install = OracleRacInstall(rac_info, node_list)
     oracle_rac_install.do_rac_install(module)
 
 @shared_task
 def oracle_rac_onenode_setup(node_info,module):
-    print('Oracle RAC One Node安装已启动！')
+    print('Oracle RAC One Node installation is started！')
     oracle_rac_onenode_install = OracleRacOneNodeInstall(node_info)
     oracle_rac_onenode_install.do_rac_install(module)
 
 @shared_task
 def oracle_onenode_setup(node_info,module):
-    print('Oracle One Node安装已启动！')
+    print('Oracle One Node installation is started！')
     oracle_onenode_install = OracleOneNodeInstall(node_info)
     oracle_onenode_install.do_onenode_install(module)
 
 
 @shared_task
 def mysql_setup(node_info):
-    print('MySQL安装已启动！')
+    print('MySQL installation is started！')
     mysql_install = MysqlInstall(node_info)
     mysql_install.do_mysql_install()

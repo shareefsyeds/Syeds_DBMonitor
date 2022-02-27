@@ -5,13 +5,13 @@ from django.utils import timezone
 # Create your models here.
 
 class Users(AbstractUser):
-    position = models.CharField(max_length=64, verbose_name='职位信息', blank=True, null=True)
-    avatar = models.CharField(max_length=256, verbose_name='头像', blank=True, null=True)
-    mobile = models.CharField(max_length=11, verbose_name='手机', blank=True, null=True)
+    position = models.CharField(max_length=64, verbose_name='Position information', blank=True, null=True)
+    avatar = models.CharField(max_length=256, verbose_name='Head portrait', blank=True, null=True)
+    mobile = models.CharField(max_length=11, verbose_name='Mobile phone', blank=True, null=True)
 
     class Meta:
         db_table = 'users'
-        verbose_name = '用户信息'
+        verbose_name = 'User information'
         verbose_name_plural = verbose_name
 
 
@@ -23,65 +23,65 @@ class AlertLog(models.Model):
         ('info', 'info')
     ]
 
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    type = models.CharField("采集源类型 1:Oracle数据库 2:MySQL数据库 3:Redis 4:Linux",max_length=16)
-    log_time = models.CharField("日志时间",max_length=255)
-    log_level = models.CharField("日志级别",max_length=16,choices=LOG_LEVEL)
-    log_content = models.TextField("日志内容")
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True, null=True)
+    tags = models.CharField("Label",max_length=32)
+    host = models.CharField("Host IP",max_length=32)
+    type = models.CharField("Collecting source type 1:The Oracle database 2:The MySQL database 3:Redis 4:Linux",max_length=16)
+    log_time = models.CharField("Log time",max_length=255)
+    log_level = models.CharField("Level of logging",max_length=16,choices=LOG_LEVEL)
+    log_content = models.TextField("Log contents")
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True, null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'alert_log'
-        verbose_name = "日志解析采集数据"
+        verbose_name = "Log analytical data"
         verbose_name_plural = verbose_name
 
 class AlarmConf(models.Model):
-    type = models.IntegerField("采集源类型 1:Oracle数据库 2:MySQL数据库 3:Redis 4:Linux")
-    name = models.CharField("告警名称",max_length=128)
-    judge = models.CharField("判断条件",max_length=8)
-    judge_value = models.FloatField("判断阈值")
-    judge_des = models.CharField("判断描述",max_length=128)
-    judge_table = models.CharField("数据来源表",max_length=128,blank=True,null=True)
-    judge_sql = models.TextField("判断SQL")
-    conf_table = models.CharField("配置表(用于检测是否告警屏蔽)",max_length=128,blank=True,null=True)
-    conf_column = models.CharField("配置表字段(用于检测是否告警屏蔽)",max_length=128,blank=True,null=True)
+    type = models.IntegerField("Collecting source type 1:Oracle database 2:MySQL database 3:Redis 4:Linux")
+    name = models.CharField("Alarm name",max_length=128)
+    judge = models.CharField("Judge conditions",max_length=8)
+    judge_value = models.FloatField("Judgment threshold")
+    judge_des = models.CharField("Judge described",max_length=128)
+    judge_table = models.CharField("Data source table",max_length=128,blank=True,null=True)
+    judge_sql = models.TextField("Determine the SQL")
+    conf_table = models.CharField("Configuration table (designed to detect the alarm block)",max_length=128,blank=True,null=True)
+    conf_column = models.CharField("Configuration table field (used to test whether the alarm screen)",max_length=128,blank=True,null=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         db_table = 'alarm_conf'
-        verbose_name = "告警配置"
+        verbose_name = "The alarm configuration"
         verbose_name_plural = verbose_name
 
 class AlarmInfo(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    url = models.CharField("连接地址",max_length=255)
-    alarm_type = models.CharField("告警类型",max_length=255)
-    alarm_header = models.CharField("告警标题",max_length=255)
-    alarm_content = models.TextField("告警标题",)
-    alarm_time = models.DateTimeField("告警时间")
+    tags = models.CharField("Label",max_length=32)
+    url = models.CharField("Connection address",max_length=255)
+    alarm_type = models.CharField("Alarm type",max_length=255)
+    alarm_header = models.CharField("Alarm title",max_length=255)
+    alarm_content = models.TextField("Alarm title",)
+    alarm_time = models.DateTimeField("Alarm time")
 
     class Meta:
         db_table = 'alarm_info'
-        verbose_name = "告警信息"
+        verbose_name = "The alarm information"
         verbose_name_plural = verbose_name
 
 class AlarmInfoHis(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    url = models.CharField("连接地址",max_length=255)
-    alarm_type = models.CharField("告警类型",max_length=255)
-    alarm_header = models.CharField("告警标题",max_length=255)
-    alarm_content = models.TextField("告警标题",)
-    alarm_time = models.DateTimeField("告警时间")
+    tags = models.CharField("Label",max_length=32)
+    url = models.CharField("Connection address",max_length=255)
+    alarm_type = models.CharField("Alarm types",max_length=255)
+    alarm_header = models.CharField("Alarm title",max_length=255)
+    alarm_content = models.TextField("Alarm title",)
+    alarm_time = models.DateTimeField("Alarm time")
 
     class Meta:
         db_table = 'alarm_info_his'
-        verbose_name = "告警信息"
+        verbose_name = "The alarm information"
         verbose_name_plural = verbose_name
 
 class SetupLog(models.Model):
@@ -91,15 +91,15 @@ class SetupLog(models.Model):
         ('info', 'info')
     ]
 
-    log_type = models.CharField("1:Oracle rac安装 ...",max_length=16)
-    log_time = models.CharField("日志时间",max_length=255)
-    log_level = models.CharField("日志级别",max_length=16,choices=LOG_LEVEL)
-    log_content = models.TextField("日志内容")
+    log_type = models.CharField("1:Oracle Rac installation ...",max_length=16)
+    log_time = models.CharField("Log time",max_length=255)
+    log_level = models.CharField("level of logging",max_length=16,choices=LOG_LEVEL)
+    log_content = models.TextField("Log contents")
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'setup_log'
-        verbose_name = "数据库部署日志"
+        verbose_name = "Database deployment log"
         verbose_name_plural = verbose_name
