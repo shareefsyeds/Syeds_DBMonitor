@@ -3,30 +3,30 @@ from django.db import models
 from django.utils import timezone
 
 class LinuxStat(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    port = models.IntegerField("ssh端口号",default=22)
-    hostname = models.CharField("主机名",max_length=64,blank=True,null=True)
-    ipinfo = models.CharField("IP地址信息",max_length=255,blank=True, null=True)
-    linux_version = models.CharField("linux版本",max_length=64,blank=True,null=True)
-    updays = models.FloatField("启动天数",blank=True, null=True)
-    kernel = models.CharField("内核版本",max_length=64,blank=True,null=True)
-    frame = models.CharField("系统架构",max_length=64,blank=True,null=True)
-    cpu_mode = models.CharField("CPU型号",max_length=64,blank=True, null=True)
+    tags = models.CharField("Label",max_length=32)
+    host = models.CharField("Host IP",max_length=32)
+    port = models.IntegerField("SSH port number",default=22)
+    hostname = models.CharField("Host name",max_length=64,blank=True,null=True)
+    ipinfo = models.CharField("IP address information",max_length=255,blank=True, null=True)
+    linux_version = models.CharField("Linux version",max_length=64,blank=True,null=True)
+    updays = models.FloatField("Start day",blank=True, null=True)
+    kernel = models.CharField("Kernel version",max_length=64,blank=True,null=True)
+    frame = models.CharField("System architecture",max_length=64,blank=True,null=True)
+    cpu_mode = models.CharField("CPU model",max_length=64,blank=True, null=True)
     cpu_cache = models.CharField("CPU cache",max_length=64,blank=True, null=True)
-    processor = models.CharField("CPU核心数",max_length=64,blank=True, null=True)
-    cpu_speed = models.CharField("CPU频率",max_length=512,blank=True, null=True)
-    recv_kbps = models.FloatField("接收流量",blank=True, null=True)
-    send_kbps = models.FloatField("发送流量",blank=True, null=True)
+    processor = models.CharField("Number of CPU core",max_length=64,blank=True, null=True)
+    cpu_speed = models.CharField("CPU frequency",max_length=512,blank=True, null=True)
+    recv_kbps = models.FloatField("Receives the traffic",blank=True, null=True)
+    send_kbps = models.FloatField("Send traffic",blank=True, null=True)
     load1 = models.FloatField(blank=True, null=True)
     load5 = models.FloatField(blank=True, null=True)
     load15 = models.FloatField(blank=True, null=True)
     cpu_sys = models.FloatField(blank=True, null=True)
     cpu_iowait = models.FloatField(blank=True, null=True)
     cpu_user = models.FloatField(blank=True, null=True)
-    cpu_used = models.FloatField("CPU使用率",blank=True, null=True)
-    memtotal = models.FloatField("内存总大小",blank=True, null=True)
-    mem_used = models.FloatField("内存使用率",blank=True, null=True)
+    cpu_used = models.FloatField("CPU usage",blank=True, null=True)
+    memtotal = models.FloatField("Total memory size",blank=True, null=True)
+    mem_used = models.FloatField("Memory usage",blank=True, null=True)
     mem_cache = models.FloatField(blank=True, null=True)
     mem_buffer = models.FloatField(blank=True, null=True)
     mem_free = models.FloatField(blank=True, null=True)
@@ -53,94 +53,94 @@ class LinuxStat(models.Model):
     intr = models.FloatField(blank=True, null=True)
     ctx = models.FloatField(blank=True, null=True)
     softirq = models.FloatField(blank=True, null=True)
-    status = models.IntegerField("linux主机连接状态 0成功 1失败",blank=True, null=True)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True,null=True)
+    status = models.IntegerField("Linux host connection status 0 success 1 Failure",blank=True, null=True)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True,null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'linux_stat'
-        verbose_name = "Linux主机采集数据"
+        verbose_name = "Linux host to collect data"
         verbose_name_plural = verbose_name
 
 
 class LinuxDisk(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    dev = models.CharField("设备",max_length=64,blank=True,null=True)
-    total_size = models.FloatField("总空间大小",blank=True, null=True)
-    used_size = models.FloatField("使用空间大小",blank=True, null=True)
-    free_size = models.FloatField("剩余空间大小",blank=True,null=True)
-    used_percent = models.FloatField("使用率",blank=True,null=True)
-    mount_point = models.CharField("挂载点",max_length=256,blank=True,null=True)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True,null=True)
+    tags = models.CharField("Label",max_length=32)
+    host = models.CharField("Host IP",max_length=32)
+    dev = models.CharField("Equipment",max_length=64,blank=True,null=True)
+    total_size = models.FloatField("Total size",blank=True, null=True)
+    used_size = models.FloatField("Used space size",blank=True, null=True)
+    free_size = models.FloatField("Remaining space size",blank=True,null=True)
+    used_percent = models.FloatField("usage",blank=True,null=True)
+    mount_point = models.CharField("Mount point",max_length=256,blank=True,null=True)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True,null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'linux_disk'
-        verbose_name = "Linux磁盘信息采集数据"
+        verbose_name = "Linux disk information acquisition data"
         verbose_name_plural = verbose_name
 
 class LinuxIoStat(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    dev = models.CharField("设备",max_length=64,blank=True,null=True)
-    rd_s = models.FloatField("每秒读请求数",blank=True, null=True)
-    rd_avgkb = models.FloatField("读请求平均大小",blank=True, null=True)
-    rd_m_s = models.FloatField("每秒读大小(mb)",blank=True, null=True)
-    rd_mrg_s = models.FloatField("每秒读合并(百分比)",blank=True, null=True)
-    rd_cnc = models.FloatField("读并发数",blank=True, null=True)
-    rd_rt = models.FloatField("读响应时间",blank=True, null=True)
-    wr_s = models.FloatField("每秒写请求数",blank=True, null=True)
-    wr_avgkb = models.FloatField("写请求平均大小",blank=True, null=True)
-    wr_m_s = models.FloatField("每秒写大小(mb)",blank=True, null=True)
-    wr_mrg_s = models.FloatField("每秒写合并(百分比)",blank=True, null=True)
-    wr_cnc = models.FloatField("写并发数",blank=True, null=True)
-    wr_rt = models.FloatField("写相应时间",blank=True, null=True)
+    tags = models.CharField("Label",max_length=32)
+    host = models.CharField("Host IP",max_length=32)
+    dev = models.CharField("Equipment",max_length=64,blank=True,null=True)
+    rd_s = models.FloatField("Read requests per second",blank=True, null=True)
+    rd_avgkb = models.FloatField("Read requests an average size",blank=True, null=True)
+    rd_m_s = models.FloatField("Read size (MB) per second",blank=True, null=True)
+    rd_mrg_s = models.FloatField("Read per second merge (percentage)",blank=True, null=True)
+    rd_cnc = models.FloatField("Read the concurrency",blank=True, null=True)
+    rd_rt = models.FloatField("Read the response time",blank=True, null=True)
+    wr_s = models.FloatField("Write requests per second",blank=True, null=True)
+    wr_avgkb = models.FloatField("Write requests an average size",blank=True, null=True)
+    wr_m_s = models.FloatField("Write size (MB) per second",blank=True, null=True)
+    wr_mrg_s = models.FloatField("Write a second merge (percentage)",blank=True, null=True)
+    wr_cnc = models.FloatField("Write the number of concurrent",blank=True, null=True)
+    wr_rt = models.FloatField("Write the corresponding time",blank=True, null=True)
     busy = models.FloatField("%util",blank=True, null=True)
-    in_prg = models.FloatField("排队请求数",blank=True, null=True)
-    io_s = models.FloatField("物理磁盘吞吐量",blank=True, null=True)
-    qtime = models.FloatField("IO请求队列时间(平均排队时间)",blank=True, null=True)
-    stime = models.FloatField("IO请求服务时间",blank=True, null=True)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True,null=True)
+    in_prg = models.FloatField("Queued requests",blank=True, null=True)
+    io_s = models.FloatField("Physical disk throughput",blank=True, null=True)
+    qtime = models.FloatField("IO request queue time (average queue time)",blank=True, null=True)
+    stime = models.FloatField("IO request service time",blank=True, null=True)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True,null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'linux_io_stat'
-        verbose_name = "Linux磁盘IO信息"
+        verbose_name = "Linux disk I/o information"
         verbose_name_plural = verbose_name
 
 
 class LinuxStatHis(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    port = models.IntegerField("ssh端口号",default=22)
-    hostname = models.CharField("主机名",max_length=64,blank=True,null=True)
-    ipinfo = models.CharField("IP地址信息",max_length=255,blank=True, null=True)
-    linux_version = models.CharField("linux版本",max_length=64,blank=True,null=True)
-    updays = models.FloatField("启动天数",blank=True, null=True)
-    kernel = models.CharField("内核版本",max_length=64,blank=True,null=True)
-    frame = models.CharField("系统架构",max_length=64,blank=True,null=True)
-    cpu_mode = models.CharField("CPU型号",max_length=64,blank=True, null=True)
+    tags = models.CharField("Label",max_length=32)
+    host = models.CharField("Host IP",max_length=32)
+    port = models.IntegerField("SSH port number",default=22)
+    hostname = models.CharField("Host name.",max_length=64,blank=True,null=True)
+    ipinfo = models.CharField("IP address information",max_length=255,blank=True, null=True)
+    linux_version = models.CharField("Linux version",max_length=64,blank=True,null=True)
+    updays = models.FloatField("Start day",blank=True, null=True)
+    kernel = models.CharField("Kernel version",max_length=64,blank=True,null=True)
+    frame = models.CharField("System architecture",max_length=64,blank=True,null=True)
+    cpu_mode = models.CharField("CPU model",max_length=64,blank=True, null=True)
     cpu_cache = models.CharField("CPU cache",max_length=64,blank=True, null=True)
-    processor = models.CharField("CPU核心数",max_length=64,blank=True, null=True)
-    cpu_speed = models.CharField("CPU频率",max_length=512,blank=True, null=True)
-    recv_kbps = models.FloatField("接收流量",blank=True, null=True)
-    send_kbps = models.FloatField("发送流量",blank=True, null=True)
+    processor = models.CharField("Number of CPU core",max_length=64,blank=True, null=True)
+    cpu_speed = models.CharField("CPU frequency",max_length=512,blank=True, null=True)
+    recv_kbps = models.FloatField("Receives the traffic",blank=True, null=True)
+    send_kbps = models.FloatField("Send traffic",blank=True, null=True)
     load1 = models.FloatField(blank=True, null=True)
     load5 = models.FloatField(blank=True, null=True)
     load15 = models.FloatField(blank=True, null=True)
     cpu_sys = models.FloatField(blank=True, null=True)
     cpu_iowait = models.FloatField(blank=True, null=True)
     cpu_user = models.FloatField(blank=True, null=True)
-    cpu_used = models.FloatField("CPU使用率",blank=True, null=True)
-    memtotal = models.FloatField("内存总大小",blank=True, null=True)
-    mem_used = models.FloatField("内存使用率",blank=True, null=True)
+    cpu_used = models.FloatField("CPU usage",blank=True, null=True)
+    memtotal = models.FloatField("Total memory size",blank=True, null=True)
+    mem_used = models.FloatField("Memory usage",blank=True, null=True)
     mem_cache = models.FloatField(blank=True, null=True)
     mem_buffer = models.FloatField(blank=True, null=True)
     mem_free = models.FloatField(blank=True, null=True)
@@ -167,64 +167,64 @@ class LinuxStatHis(models.Model):
     intr = models.FloatField(blank=True, null=True)
     ctx = models.FloatField(blank=True, null=True)
     softirq = models.FloatField(blank=True, null=True)
-    status = models.IntegerField("linux主机连接状态 0成功 1失败",blank=True, null=True)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True,null=True)
+    status = models.IntegerField("Linux host connection state 0 success 1 failed",blank=True, null=True)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True,null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'linux_stat_his'
-        verbose_name = "Linux主机采集数据"
+        verbose_name = "Linux host data."
         verbose_name_plural = verbose_name
 
 
 class LinuxDiskHis(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    dev = models.CharField("设备",max_length=64,blank=True,null=True)
-    total_size = models.FloatField("总空间大小",blank=True, null=True)
-    used_size = models.FloatField("使用空间大小",blank=True, null=True)
-    free_size = models.FloatField("剩余空间大小",blank=True,null=True)
-    used_percent = models.FloatField("使用率",blank=True,null=True)
-    mount_point = models.CharField("挂载点",max_length=256,blank=True,null=True)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True,null=True)
+    tags = models.CharField("Label",max_length=32)
+    host = models.CharField("Host IP",max_length=32)
+    dev = models.CharField("Equipment",max_length=64,blank=True,null=True)
+    total_size = models.FloatField("Total size",blank=True, null=True)
+    used_size = models.FloatField("Used space",blank=True, null=True)
+    free_size = models.FloatField("Remaining space size",blank=True,null=True)
+    used_percent = models.FloatField("Usage",blank=True,null=True)
+    mount_point = models.CharField("Mount point",max_length=256,blank=True,null=True)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True,null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'linux_disk_his'
-        verbose_name = "Linux磁盘信息采集数据"
+        verbose_name = "LinuX disk information acquisition data"
         verbose_name_plural = verbose_name
 
 class LinuxIoStatHis(models.Model):
-    tags = models.CharField("标签",max_length=32)
-    host = models.CharField("主机ip",max_length=32)
-    dev = models.CharField("设备",max_length=64,blank=True,null=True)
-    rd_s = models.FloatField("每秒读请求数",blank=True, null=True)
-    rd_avgkb = models.FloatField("读请求平均大小",blank=True, null=True)
-    rd_m_s = models.FloatField("每秒读大小(mb)",blank=True, null=True)
-    rd_mrg_s = models.FloatField("每秒读合并(百分比)",blank=True, null=True)
-    rd_cnc = models.FloatField("读并发数",blank=True, null=True)
-    rd_rt = models.FloatField("读响应时间",blank=True, null=True)
-    wr_s = models.FloatField("每秒写请求数",blank=True, null=True)
-    wr_avgkb = models.FloatField("写请求平均大小",blank=True, null=True)
-    wr_m_s = models.FloatField("每秒写大小(mb)",blank=True, null=True)
-    wr_mrg_s = models.FloatField("每秒写合并(百分比)",blank=True, null=True)
-    wr_cnc = models.FloatField("写并发数",blank=True, null=True)
-    wr_rt = models.FloatField("写相应时间",blank=True, null=True)
+    tags = models.CharField("Label",max_length=32)
+    host = models.CharField("Host IP",max_length=32)
+    dev = models.CharField("Equipment",max_length=64,blank=True,null=True)
+    rd_s = models.FloatField("Read requests per second",blank=True, null=True)
+    rd_avgkb = models.FloatField("Read requests an average size",blank=True, null=True)
+    rd_m_s = models.FloatField("Read size (MB) per second",blank=True, null=True)
+    rd_mrg_s = models.FloatField("Second read merger (%)",blank=True, null=True)
+    rd_cnc = models.FloatField("Read concurrency",blank=True, null=True)
+    rd_rt = models.FloatField("Read response time",blank=True, null=True)
+    wr_s = models.FloatField("Write requests per second",blank=True, null=True)
+    wr_avgkb = models.FloatField("Write requests an average size",blank=True, null=True)
+    wr_m_s = models.FloatField("Write size (MB) per second",blank=True, null=True)
+    wr_mrg_s = models.FloatField("Write a second merge (percentage)",blank=True, null=True)
+    wr_cnc = models.FloatField("Write the number of concurrent",blank=True, null=True)
+    wr_rt = models.FloatField("Write the corresponding time",blank=True, null=True)
     busy = models.FloatField("%util",blank=True, null=True)
-    in_prg = models.FloatField("排队请求数",blank=True, null=True)
-    io_s = models.FloatField("物理磁盘吞吐量",blank=True, null=True)
-    qtime = models.FloatField("IO请求队列时间(平均排队时间)",blank=True, null=True)
-    stime = models.FloatField("IO请求服务时间",blank=True, null=True)
-    check_time = models.DateTimeField("采集时间",default=timezone.now,blank=True,null=True)
+    in_prg = models.FloatField("Queued requests",blank=True, null=True)
+    io_s = models.FloatField("Physical disk throughput",blank=True, null=True)
+    qtime = models.FloatField("IO request queue time (average queuing time)",blank=True, null=True)
+    stime = models.FloatField("IO request service time",blank=True, null=True)
+    check_time = models.DateTimeField("Acquisition time",default=timezone.now,blank=True,null=True)
 
     def __str__(self):
         return self.tags
 
     class Meta:
         db_table = 'linux_io_stat_his'
-        verbose_name = "Linux磁盘IO信息"
+        verbose_name = "Linux disk IO information"
         verbose_name_plural = verbose_name
