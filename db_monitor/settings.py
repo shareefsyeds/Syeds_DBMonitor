@@ -97,7 +97,7 @@ AUTHENTICATION_BACKENDS = ('system.views.CustomBackend',)  ## Login again to ver
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
+        'HOST': '172.23.162.119',
         'PORT': '3306',
         'NAME': 'db_monitor',
         'USER': 'root',
@@ -131,7 +131,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_AGE = 432000
 LOGIN_URL = '/auth/login'
-LANGUAGE_CODE = 'en-Us'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -192,9 +192,9 @@ PAGINATION_SETTINGS = {
 DISPLAY_PER_PAGE = 15
 
 ## celery 4
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+CELERY_RESULT_BACKEND = 'redis://172.23.162.119:6379/1'
 # CELERY_RESULT_BACKEND = 'django-db'
-CELERY_BROKER_URL = 'redis://localhost:6379/2'
+CELERY_BROKER_URL = 'redis://172.23.162.119:6379/2'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERYD_CONCURRENCY = 4
 CELERY_TIMEZONE = 'Asia/Shanghai'
