@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 {% load static %}
 
-{% block title %}Oracle数据库概览{% endblock %}
+{% block title %}An overview of the Oracle database{% endblock %}
 
 {% block content %}
 
@@ -14,7 +14,7 @@
                 <div class="ibox float-e-margins">
 
                     <div class="ibox-title">
-                        <h5>Oracle数据库概览</h5>
+                        <h5>An overview of the Oracle database</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -30,12 +30,12 @@
                                 <div class="col-sm-2">
                                     <input class="form-control input-sm" type="text" name="hostname__icontains"
                                            id="hostname"
-                                           placeholder="主机名" style=""/>
+                                           placeholder="The host name." style=""/>
                                 </div>
 
                                 <div class="col-sm-2">
                                     <select class="input-sm form-control select2   inline" name="type" id="type">
-                                        <option value="">Oracle版本</option>
+                                        <option value="">Oracle version</option>
                                         {% for i in  ''|oracle_version_choices %}
                                             <option value="{{ i.0 }}">{{ i.1 }}</option>
                                         {% endfor %}
@@ -56,31 +56,31 @@
                                     <thead>
                                     <tr>
                                       <th>ID</th>
-                                      <th>标签</th>
-                                      <th>IP地址</th>
-                                      <th>端口号</th>
-                                      <th>服务名</th>
-                                      <th>服务名(CDB)</th>
-                                      <th>监控用户</th>
-                                      <th>监控用户(CDB)</th>
-                                      <th>os用户</th>
-                                      <th>SSH端口</th>
-                                      <th>版本</th>
-                                      <th>通断告警</th>
-                                      <th>tbs告警</th>
-                                      <th>adg告警</th>
-                                      <th>temp告警</th>
-                                      <th>undo告警</th>
-                                      <th>连接数告警</th>
-                                      <th>后台日志告警</th>
-                                      <th>失效索引告警</th>
-                                      <th>锁异常告警</th>
-                                      <th>密码过期告警</th>
-                                      <th>综合性能告警</th>
-                                      <th>pga使用率告警</th>
-                                      <th>归档使用率告警</th>
-                                      <th>编辑</th>
-                                      <th>删除</th>
+                                      <th>Label</th>
+                                      <th>IP address</th>
+                                      <th>Port number</th>
+                                      <th>Service name</th>
+                                      <th>Service name(CDB)</th>
+                                      <th>Monitoring user</th>
+                                      <th>Monitoring user(CDB)</th>
+                                      <th>OS user</th>
+                                      <th>SSH port</th>
+                                      <th>Version</th>
+                                      <th>On and off the alarm</th>
+                                      <th>TBS alarm</th>
+                                      <th>adg alarm</th>
+                                      <th>Temp alarm</th>
+                                      <th>Uundo alarm</th>
+                                      <th>Number of connections the alarm</th>
+                                      <th>Background log alarms</th>
+                                      <th>Index of failure alarm</th>
+                                      <th>Lock faults</th>
+                                      <th>Password expired alarms</th>
+                                      <th>Comprehensive performance warning</th>
+                                      <th>PGA usage warning</th>
+                                      <th>Archive utilization warning</th>
+                                      <th>Editor</th>
+                                      <th>Delete</th>
                                     </tr>
                                     </thead>
                                     <tbody>
