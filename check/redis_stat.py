@@ -58,7 +58,7 @@ class RedisStat(object):
             self.res['commandstats'][each] = 0
 
 
-    # 配置信息
+    # Configuration information
     def get_redis_config(self):
         config =  self.conn.config_get()
         for conf_name in CONFIG_KEYS:
@@ -80,7 +80,7 @@ class RedisStat(object):
                 self.res['info'][k] = v
             if k in STAT_KEYS:
                 self.res['stat'][k] = round((v - self.old_stat[k])/elapsed,2)
-            # 统计各库keys数量
+            # Statistics the number keys
             if self.db_pattern.match(k):
                 total_keys += v['keys']
                 expire_keys += v['expires']

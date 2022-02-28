@@ -101,25 +101,25 @@ def parse_oracle_alert_logs(tags,host,log_stream,version):
 def get_oracle_alert(tags,db_conn,oracle_params,linux_params):
     db_version = oracle_params['db_version']
     host = oracle_params['host']
-    # 取alert日志
+    # Take alert log
     sql = "select alert_log,alert_log_seek from oracle_list where tags='{}' ".format(tags)
     alert_log,alert_log_seek = mysql_query(sql)[0]
     if not alert_log:
         sql = "select value from v$diag_info where name = 'Diag Trace'"
         alert_dir = query_one(db_conn, sql)
-        # 取实例名
+        # Take the instance name
         sql = "select instance_name from v$instance"
         instance_name = query_one(db_conn, sql)
         alert_log = '{}/alert_{}.log'.format(alert_dir[0], instance_name[0])
         alert_log_seek = 0
         sql = "delete from alert_log where tags='{}' and type=1 ".format(tags)
         mysql_exec(sql)
-    # ssh获取日志内容
+    # SSH access log content
     linux_oper = LinuxBase(linux_params)
-    # 日志解析
+    # Log parsing
     alert_content = linux_oper.readfile(alert_log,seek=alert_log_seek)
     alert_log_seek = parse_oracle_alert_logs(tags,host,alert_content,db_version)
-    # 更新配置表中日志路径,日志偏移量
+    #Update configuration log path in the table, log the offset
     sql = "update oracle_list set alert_log='{}',alert_log_seek={} where tags='{}' " .format(alert_log,alert_log_seek,tags)
     mysql_exec(sql)
 

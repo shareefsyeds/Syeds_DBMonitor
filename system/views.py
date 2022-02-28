@@ -26,7 +26,7 @@ logger = logging.getLogger('system')
 
 class UserInfo(APIView):
     """
-    获取用户信息
+    Get the user information
     """
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -58,7 +58,7 @@ class UserLogout(APIView):
 
 class CustomBackend(ModelBackend):
     """
-    用户名字/邮箱名字 登录
+    The user name/email login name
     :param request:
     :return:
     """
@@ -81,7 +81,7 @@ class Menu(APIView):
                 "name": 'assets',
                 "meta": {
                     "icon": 'ios-cloud',
-                    "title": '资源管理'
+                    "title": 'Resource management'
                 },
                 "component": 'Main',
                 "children": [
@@ -91,7 +91,7 @@ class Menu(APIView):
                         'meta': {
                             'access': ['assets.view_oraclelist'],
                             'icon': 'ios-menu',
-                            'title': 'Oracle数据库'
+                            'title': 'Oracle database'
                         },
                         'component': 'assets/oracle-list'
                     },
@@ -101,7 +101,7 @@ class Menu(APIView):
                         'meta': {
                             'access': ['assets.view_mysqllist'],
                             'icon': 'ios-menu',
-                            'title': 'MySQL数据库'
+                            'title': 'MySQL database'
                         },
                         'component': 'assets/mysql-list'
                     },
@@ -111,7 +111,7 @@ class Menu(APIView):
                         'meta': {
                             'access': ['assets.view_linuxlist'],
                             'icon': 'ios-menu',
-                            'title': 'Linux主机'
+                            'title': 'Linux host'
                         },
                         'component': 'assets/linux-list'
                     },
@@ -129,10 +129,10 @@ class Menu(APIView):
             },
             {
                 "path": '/monlist',
-                "name": '实例列表',
+                "name": 'Instance list',
                 "meta": {
                     "icon": 'ios-apps',
-                    "title": '实例列表'
+                    "title": 'Instance list'
                 },
                 "component": 'Main',
                 "children": [
@@ -141,7 +141,7 @@ class Menu(APIView):
                         'name': 'oracle',
                         'meta': {
                             'icon': 'ios-menu',
-                            'title': 'Oracle列表',
+                            'title': 'Oracle list',
                             'access': ['oracle.view_oraclestat'],
                         },
                         'component': 'oracle/stat-list'
@@ -151,7 +151,7 @@ class Menu(APIView):
                         'name': 'mysql',
                         'meta': {
                             'icon': 'ios-menu',
-                            'title': 'MySQL列表',
+                            'title': 'MySQL list ',
                             'access': ['mysql.view_mysqlstat'],
                         },
                         'component': 'mysql/stat-list'
@@ -161,7 +161,7 @@ class Menu(APIView):
                         'name': 'redis',
                         'meta': {
                             'icon': 'ios-menu',
-                            'title': 'Redis列表',
+                            'title': 'Redis list',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/stat-list'
@@ -171,7 +171,7 @@ class Menu(APIView):
                         'name': 'linux',
                         'meta': {
                             'icon': 'ios-menu',
-                            'title': 'Linux列表',
+                            'title': 'Linux list ',
                             'access': ['oracle.view_oraclestat'],
                         },
                         'component': 'linux/stat-list'
@@ -184,7 +184,7 @@ class Menu(APIView):
                 "name": 'alarm',
                 "meta": {
                     "icon": 'ios-warning',
-                    "title": '监控告警'
+                    "title": 'Monitoring alarm'
                 },
                 "component": 'Main',
                 "children": [
@@ -194,7 +194,7 @@ class Menu(APIView):
                         'meta': {
                             'access': ['system.view_alarminfo'],
                             'icon': 'ios-menu',
-                            'title': '告警记录'
+                            'title': 'Alarm record'
                         },
                         'component': 'system/alarm-info'
                     },
@@ -204,7 +204,7 @@ class Menu(APIView):
                         'meta': {
                             'access': ['system.view_alarmconf'],
                             'icon': 'ios-menu',
-                            'title': '告警配置'
+                            'title': 'Alarm configuration'
                         },
                         'component': 'system/alarm-conf'
                     }
@@ -215,7 +215,7 @@ class Menu(APIView):
                 "name": 'setup',
                 "meta": {
                     "icon": 'ios-build',
-                    "title": '数据库部署'
+                    "title": 'Database deployment'
                 },
                 "component": 'Main',
                 "children": [
@@ -267,7 +267,7 @@ class Menu(APIView):
                 "meta": {
                     'hideInMenu': 'true',
                     "icon": 'ios-apps',
-                    "title": 'Oracle数据库监控'
+                    "title": 'Oracle database monitoring'
                 },
                 "component": 'Main',
                 "children": [
@@ -276,7 +276,7 @@ class Menu(APIView):
                         'name': 'oracle-view',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': 'Oracle概览',
+                            'title': 'An overview of the Oracle',
                             'access': ['oracle.view_oraclestat'],
                         },
                         'component': 'oracle/view'
@@ -286,7 +286,7 @@ class Menu(APIView):
                         'name': 'oracle-resource',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '资源',
+                            'title': 'resources',
                             'access': ['oracle.view_oracletablespace'],
                         },
                         'component': 'oracle/resource'
@@ -296,7 +296,7 @@ class Menu(APIView):
                         'name': 'oracle-tablespace',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '表空间',
+                            'title': 'Tablespace',
                             'access': ['oracle.view_oracletablespace'],
                         },
                         'component': 'oracle/tablespace'
@@ -306,7 +306,7 @@ class Menu(APIView):
                         'name': 'oracle-temptablespace',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '临时表空间',
+                            'title': 'Temporary tablespace',
                             'access': ['oracle.view_oracletablespace'],
                         },
                         'component': 'oracle/temp-tablespace'
@@ -316,7 +316,7 @@ class Menu(APIView):
                         'name': 'oracle-undotablespace',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': 'UNDO表空间',
+                            'title': 'UNDO tablespace',
                             'access': ['oracle.view_oracletablespace'],
                         },
                         'component': 'oracle/undo-tablespace'
@@ -326,7 +326,7 @@ class Menu(APIView):
                         'name': 'oracle-active-session',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '活动会话',
+                            'title': 'Activity session',
                             'access': ['oracle.view_oraclestat'],
                         },
                         'component': 'oracle/active-session'
@@ -336,7 +336,7 @@ class Menu(APIView):
                         'name': 'oracle-performance',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '性能图',
+                            'title': 'Performance figure',
                             'access': ['oracle.view_oraclestat'],
                         },
                         'component': 'oracle/performance'
@@ -356,7 +356,7 @@ class Menu(APIView):
                         'name': 'oracle-alertlog',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '日志解析',
+                            'title': 'Log parsing',
                             'access': ['oracle.view_oraclestat'],
                         },
                         'component': 'oracle/alert-log'
@@ -366,7 +366,7 @@ class Menu(APIView):
                         'name': 'oracle-tablestats',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '统计信息',
+                            'title': 'statistics',
                             'access': ['oracle.view_oraclestat'],
                         },
                         'component': 'oracle/table-stats'
@@ -381,7 +381,7 @@ class Menu(APIView):
                 "meta": {
                     'hideInMenu': 'true',
                     "icon": 'ios-apps',
-                    "title": 'Linux主机监控'
+                    "title": 'Linux host monitoring'
                 },
                 "component": 'Main',
                 "children": [
@@ -390,7 +390,7 @@ class Menu(APIView):
                         'name': 'linux-view',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': 'Linux概览',
+                            'title': 'Linux overview',
                             'access': ['linux.view_linuxstat'],
                         },
                         'component': 'linux/view'
@@ -400,7 +400,7 @@ class Menu(APIView):
                         'name': 'linux-io',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '磁盘IO',
+                            'title': 'Disk I/o',
                             'access': ['linux.view_linuxstat'],
                         },
                         'component': 'linux/io'
@@ -410,7 +410,7 @@ class Menu(APIView):
                         'name': 'linux-memory',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '内存&虚拟内存',
+                            'title': 'Memory and virtual memory',
                             'access': ['linux.view_linuxstat'],
                         },
                         'component': 'linux/memory'
@@ -423,7 +423,7 @@ class Menu(APIView):
                 "meta": {
                     'hideInMenu': 'true',
                     "icon": 'ios-apps',
-                    "title": 'MySQL数据库监控'
+                    "title": 'MySQL database monitoring'
                 },
                 "component": 'Main',
                 "children": [
@@ -432,7 +432,7 @@ class Menu(APIView):
                         'name': 'mysql-view',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': 'MySQL概览',
+                            'title': 'An overview of the MySQL',
                             'access': ['mysql.view_mysqlstat'],
                         },
                         'component': 'mysql/view'
@@ -462,7 +462,7 @@ class Menu(APIView):
                         'name': 'mysql-alert-log',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '后台日志',
+                            'title': 'Background the log',
                             'access': ['mysql.view_mysqlstat'],
                         },
                         'component': 'mysql/alert-log'
@@ -472,7 +472,7 @@ class Menu(APIView):
                         'name': 'mysql-slowquery-log',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '慢查询',
+                            'title': 'Slow query',
                             'access': ['mysql.view_mysqlstat'],
                         },
                         'component': 'mysql/slowquery-log'
@@ -486,7 +486,7 @@ class Menu(APIView):
                 "meta": {
                     'hideInMenu': 'true',
                     "icon": 'ios-apps',
-                    "title": 'Redis监控'
+                    "title": 'Redis monitoring '
                 },
                 "component": 'Main',
                 "children": [
@@ -495,7 +495,7 @@ class Menu(APIView):
                         'name': 'redis-view',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': 'Redis概览',
+                            'title': 'An overview of Redis',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/view'
@@ -505,7 +505,7 @@ class Menu(APIView):
                         'name': 'redis-immediate-stats',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': 'Redis实时状态',
+                            'title': 'Redis real-time status',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/immediate-stats'
@@ -515,7 +515,7 @@ class Menu(APIView):
                         'name': 'redis-config',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': 'Redis配置项',
+                            'title': 'Redis configuration items',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/config'
@@ -525,7 +525,7 @@ class Menu(APIView):
                         'name': 'redis-slowlog',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '慢查询分析',
+                            'title': 'Slow query analysis',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/slowlog'
@@ -535,7 +535,7 @@ class Menu(APIView):
                         'name': 'redis-clientlist',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '连接信息',
+                            'title': 'Connection information',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/clientlist'
@@ -545,7 +545,7 @@ class Menu(APIView):
                         'name': 'redis-commandstats',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '命令曲线',
+                            'title': 'Command curve ',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/command-stats'
@@ -555,7 +555,7 @@ class Menu(APIView):
                         'name': 'redis-alert-log',
                         'meta': {
                             'hideInMenu': 'true',
-                            'title': '后台日志',
+                            'title': 'Background log ',
                             'access': ['rds.view_redisstat'],
                         },
                         'component': 'redis/alert-log'

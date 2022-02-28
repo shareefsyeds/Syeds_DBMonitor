@@ -67,21 +67,21 @@ class OracleRacOneNodeInstall():
             'rm -rf /var/tmp/.oracle',
             'rm -rf /opt/oracle'
         ]
-        # 删除用户组
+        # Delete the user group
         cmd_list.extend(
             ['groupdel {}'.format(group[1]) for group in self.linux_group_list]
         )
-        # 删除用户
+        # Delete user
         cmd_list.extend(
             ['userdel -rf grid',
             'userdel -rf oracle'],
         )
-        # 清除ASM信息
+        # Remove the ASM information
         cmd_list.extend(
             ['dd if=/dev/zero of={} bs=8192 count=2147'.format(self.node_info['ocr_disk']),
             'dd if=/dev/zero of={} bs=8192 count=2147'.format(self.node_info['data_disk'])]
         )
-        # 清理完成后重启服务器
+        # Clean up after the completion of the restart the server
         cmd_list.extend(
             ['reboot']
         )

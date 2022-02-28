@@ -9,7 +9,7 @@ class Mysql_Do(MysqlBase):
         self.db_password = self.params['password']
         self.db_port = self.params['port']
         super(Mysql_Do, self).__init__(self.params)
-    # 取参数配置
+    # Take parameters configuration
     def get_para(self,paraname):
         sql = "show global variables like '{}' " .format(paraname)
         res = self.query(sql)

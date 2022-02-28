@@ -57,7 +57,7 @@ class MysqlInstall():
     
     def generate_mysql_cnf(self):
         mycnf = 'my.cnf_new'
-        # 读取模板配置文件
+        # Read the template configuration file
         cnf_template = '{}my.cnf.template.5.7'.format(self.local_path) if self.node_info['version'] == 'MySQL5.7' else '{}my.cnf.template.8.0'.format(self.local_path)
         parser = configparser.ConfigParser()
         conf_temp = parser.read(cnf_template)
@@ -78,7 +78,7 @@ class MysqlInstall():
         log_bin = '{}/mybinlog'.format(data_path)
         innodb_undo_directory = '{}/undolog'.format(data_path)
 
-        # innodb buffer pool大小设置为物理内存*0.7
+        # Innodb buffer pool size is set to physical memory * 0.7
         memory_size = float(self.node_info['memory'])
         innodb_buffer_pool_size = str(memory_size*0.7) + 'G'
 

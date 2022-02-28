@@ -17,7 +17,7 @@ def debug_task(self):
     print('Request: {0!r}'.format(self.request))
 
 
-##定时任务
+##Timing task
 app.conf.update(
     CELERYBEAT_SCHEDULE={
     }
